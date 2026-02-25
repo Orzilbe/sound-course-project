@@ -370,12 +370,19 @@
         }
 
         function startGame() {
-            gameActive = true;
-            // FIX: Audio already unlocked, just play
+            // FIX: Wait for audio to actually start playing, then sync timer to it
             audio.currentTime = 0;
-            audio.play().catch(() => {});
-            gameStartTime = preScrollStartTime + PRE_SCROLL_SEC * 1000;
-            requestAnimationFrame(gameLoop);
+            audio.play().then(() => {
+                // Audio is now truly playing — start game timer from NOW
+                gameActive = true;
+                gameStartTime = performance.now();
+                requestAnimationFrame(gameLoop);
+            }).catch(() => {
+                // Audio failed — fall back to original timing
+                gameActive = true;
+                gameStartTime = preScrollStartTime + PRE_SCROLL_SEC * 1000;
+                requestAnimationFrame(gameLoop);
+            });
         }
 
         function getTime() { return (performance.now() - gameStartTime) / 1000; }

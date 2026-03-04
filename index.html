@@ -52,7 +52,6 @@
         .note.holding { box-shadow: 0 0 40px currentColor; border-color: white; }
         .note.holding .note-tail { opacity: 0.8; }
 
-        /* Hit burst animation */
         .note-burst {
             position: absolute; width: 80px; height: 80px; border-radius: 50%;
             left: 50%; margin-left: -40px; z-index: 6; pointer-events: none;
@@ -81,7 +80,6 @@
             font-size: 20px; font-weight: bold; z-index: 30; pointer-events: none;
             animation: feedbackUp 0.6s ease-out forwards;
         }
-        /* MISS feedback style */
         .miss-feedback {
             position: absolute; left: 50%; margin-left: -30px; width: 60px; text-align: center;
             font-size: 16px; font-weight: bold; z-index: 30; pointer-events: none; color: #ff4444;
@@ -131,7 +129,6 @@
             background: rgba(0,0,0,0.92); width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-radius: 20px;
-            /* Allow touch events on overlay screens (end screen, start screen) */
             touch-action: auto;
         }
         button {
@@ -157,7 +154,6 @@
             background: rgba(255,255,255,0.1); border: 2px solid var(--color-s);
             border-radius: 12px; padding: 12px 16px; font-size: 20px;
             color: white; text-align: center; outline: none; width: 200px; margin: 10px 0;
-            /* Ensure mobile keyboard and touch work */
             touch-action: auto;
             -webkit-user-select: text;
             user-select: text;
@@ -255,6 +251,44 @@
         let streakMilestonesHit = new Set();
 
         // =============================================
+        //  COUNTDOWN SOUND (Web Audio API)
+        // =============================================
+        let audioCtx = null;
+        function getAudioCtx() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            return audioCtx;
+        }
+
+        function playCountdownBeep(isGo) {
+            try {
+                const ctx = getAudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (isGo) {
+                    // "GO!" — rising two-tone, brighter and longer
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(880, ctx.currentTime);
+                    osc.frequency.setValueAtTime(1320, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.4);
+                } else {
+                    // Count beep (3, 2, 1) — clean short tick
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(660, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.15);
+                }
+            } catch (e) {}
+        }
+
+        // =============================================
         //  LEADERBOARD
         // =============================================
         const LB_KEY = 'taptap_leaderboard';
@@ -274,10 +308,9 @@
         }
 
         // =============================================
-        //  LEVEL DATA (first line removed per request)
+        //  LEVEL DATA
         // =============================================
         const levelData = [
-          //  {time:0.6,dur:0.2,lane:2},{time:0.8,dur:0.1,lane:2},
             {time:1.0,dur:0.1,lane:2},
             {time:1.3,dur:0.1,lane:2},{time:1.5,dur:0.8,lane:2},{time:1.7,dur:0.3,lane:0},
             {time:2.1,dur:0.2,lane:0},{time:2.3,dur:0.2,lane:2},{time:2.6,dur:0.3,lane:2},
@@ -310,6 +343,9 @@
         // =============================================
         startBtn.addEventListener('click', () => {
             document.getElementById('start-screen').style.display = 'none';
+
+            // Unlock AudioContext on user gesture (mobile)
+            getAudioCtx();
 
             // FIX: Unlock audio on mobile — play+pause during user gesture
             audio.volume = 0;
@@ -353,10 +389,12 @@
                     countdownNumEl.style.animation = 'none';
                     void countdownNumEl.offsetWidth;
                     countdownNumEl.style.animation = 'countPulse 0.8s ease-out';
+                    playCountdownBeep(false);
                     count--;
                     setTimeout(tick, 1000);
                 } else {
                     countdownNumEl.textContent = 'GO!';
+                    playCountdownBeep(true);
                     countdownNumEl.style.animation = 'none';
                     void countdownNumEl.offsetWidth;
                     countdownNumEl.style.animation = 'countPulse 0.8s ease-out';
@@ -371,15 +409,12 @@
         }
 
         function startGame() {
-            // FIX: Wait for audio to actually start playing, then sync timer to it
             audio.currentTime = 0;
             audio.play().then(() => {
-                // Audio is now truly playing — start game timer from NOW
                 gameActive = true;
                 gameStartTime = performance.now();
                 requestAnimationFrame(gameLoop);
             }).catch(() => {
-                // Audio failed — fall back to original timing
                 gameActive = true;
                 gameStartTime = preScrollStartTime + PRE_SCROLL_SEC * 1000;
                 requestAnimationFrame(gameLoop);
@@ -414,18 +449,15 @@
             for (const n of notes) {
                 if (n.state === 'done' || n.state === 'miss') continue;
 
-                // FIX: Held notes — pin to hit line, shrink tail
                 if (n.state === 'held') {
                     const isHeld = heldKeys.has(n.lane) || isTouchHeld(n.lane);
                     const endTime = n.time + n.dur;
                     const elapsed = t - n.holdStart;
                     const ticks = Math.floor(elapsed / 0.12);
 
-                    // Pin at hit line instead of continuing to scroll
                     n.el.style.top = HIT_LINE_Y + 'px';
                     n.y = HIT_LINE_Y;
 
-                    // Shrink tail as hold progresses
                     const tailEl = n.el.querySelector('.note-tail');
                     if (tailEl) {
                         const remaining = Math.max(0, endTime - t);
@@ -440,7 +472,7 @@
                     if (!isHeld || t >= endTime) {
                         n.state = 'done';
                         showBurst(n.lane, HIT_LINE_Y);
-                        n.el.remove(); // FIX: remove from DOM completely
+                        n.el.remove();
                         if (t >= endTime - 0.15) {
                             score += 100;
                             scoreEl.innerText = score;
@@ -450,7 +482,6 @@
                     continue;
                 }
 
-                // Normal scrolling for active/wait notes
                 const y = timeToY(t, n.time);
                 n.y = y;
 
@@ -458,7 +489,6 @@
                 n.el.style.display = '';
                 n.el.style.top = y + 'px';
 
-                // FIX: Miss — show MISS text, remove from DOM
                 if (y > HIT_LINE_Y + HIT_WINDOW + 20) {
                     n.state = 'miss';
                     combo = 0;
@@ -529,7 +559,6 @@
         }
 
         gameBoard.addEventListener('touchstart', e => {
-            // Don't block touch on overlay screens (end screen input/buttons)
             if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
             e.preventDefault();
             for (const touch of e.changedTouches) {
@@ -612,13 +641,11 @@
             showFeedback(lane, txt, clr);
 
             if (best.isLong) {
-                // Long note — pin to hit line, start hold
                 best.state = 'held';
                 best.holdStart = getTime();
                 best.el.classList.add('holding');
-                best.el.style.top = HIT_LINE_Y + 'px'; // FIX: pin immediately
+                best.el.style.top = HIT_LINE_Y + 'px';
             } else {
-                // FIX: Short note — burst + remove from DOM completely
                 best.state = 'done';
                 showBurst(lane, best.y);
                 best.el.remove();
@@ -626,7 +653,7 @@
         }
 
         // =============================================
-        //  BURST EFFECT (when note is hit)
+        //  BURST EFFECT
         // =============================================
         function showBurst(lane, yPos) {
             const burst = document.createElement('div');
@@ -651,7 +678,6 @@
             setTimeout(() => el.remove(), 600);
         }
 
-        // FIX: Show MISS text when a note is missed
         function showMiss(lane, yPos) {
             const el = document.createElement('div');
             el.className = 'miss-feedback';
@@ -683,7 +709,6 @@
         //  END SCREEN + LEADERBOARD
         // =============================================
         function showEnd() {
-            // Re-enable touch on the game board area for the overlay
             const div = document.createElement('div');
             div.className = 'overlay-screen';
 
@@ -712,7 +737,6 @@
                 const saveBtn = document.getElementById('save-btn');
                 const nameInput = document.getElementById('name-input');
 
-                // Focus with delay to ensure mobile keyboard opens
                 setTimeout(() => {
                     nameInput.focus();
                     nameInput.click();

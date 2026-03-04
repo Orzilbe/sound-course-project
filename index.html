@@ -562,41 +562,20 @@
         menuMusicNodes = null;
     }
 
-    // ── LEADERBOARD FANFARE ───────────────────────────────────────
+    // ── LEADERBOARD CHIME ─────────────────────────────────────────
     function playLeaderboardFanfare() {
         const ctx  = getAudioCtx();
         const dest = ctx.destination;
         const now  = ctx.currentTime;
 
-        const rev = makeReverb(ctx, 2.5, 2);
+        const rev = makeReverb(ctx, 2.0, 3);
         rev.connect(dest);
 
-        // Rising arp sweep
-        const fanfare = [
-            { f: 392.00, t: 0.00 },
-            { f: 493.88, t: 0.08 },
-            { f: 587.33, t: 0.16 },
-            { f: 783.99, t: 0.24 },
-            { f: 987.77, t: 0.35 },
-            { f: 1174.66,t: 0.46 },
-        ];
-        fanfare.forEach(({ f, t }) => {
-            playTone(f, 'sine',     now + t, 0.5, 0.35, ctx, rev);
-            playTone(f * 2, 'sine', now + t, 0.25, 0.08, ctx, rev);
+        // עדין: arp קצר של 4 תווים עם sine טהור
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((f, i) => {
+            playTone(f, 'sine', now + i * 0.12, 0.7, 0.12, ctx, rev);
         });
-
-        // Final chord stab
-        const finalChord = [523.25, 659.25, 783.99];
-        finalChord.forEach(f => {
-            playTone(f, 'sawtooth', now + 0.6, 0.8, 0.08, ctx, rev, -5);
-            playTone(f, 'sawtooth', now + 0.6, 0.8, 0.08, ctx, rev,  5);
-        });
-
-        // Noise burst
-        playNoise(now + 0.6, 0.12, 0.12, ctx, dest, 6000);
-
-        // Sub thump
-        playTone(65.41, 'sine', now + 0.6, 0.5, 0.35, ctx, dest);
     }
 
         // =============================================
@@ -658,11 +637,12 @@
         }
         function addToLeaderboard(name, sc) {
             const lb = getLeaderboard();
-            lb.push({ name, score: sc, date: Date.now() });
+            const newId = Date.now() + '_' + Math.random();
+            lb.push({ id: newId, name, score: sc, date: Date.now() });
             lb.sort((a, b) => b.score - a.score);
             if (lb.length > 10) lb.length = 10;
             saveLeaderboard(lb);
-            return lb;
+            return { lb, newId };
         }
 
         // =============================================
@@ -1144,8 +1124,8 @@
 
                 const doSave = () => {
                     const name = nameInput.value.trim() || 'Player';
-                    const newLb = addToLeaderboard(name, score);
-                    const myIdx = newLb.findIndex(e => e.score === score && e.name === name);
+                    const { lb: newLb, newId } = addToLeaderboard(name, score);
+                    const myIdx = newLb.findIndex(e => e.id === newId);
                     div.innerHTML = `
                         <h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px;position:relative;z-index:2;">GAME OVER</h1>
                         <p style="font-size:38px;margin:8px 0;font-weight:bold;position:relative;z-index:2;">${score.toLocaleString()}</p>

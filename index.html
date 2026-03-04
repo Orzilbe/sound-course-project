@@ -201,6 +201,7 @@
     </div>
 
     <audio id="bgm" src="Tap_tap.mp3" preload="auto"></audio>
+    <audio id="leaderboard-bgm" src="leaderboard.wav" preload="auto" loop></audio>
 
     <script>
         // =============================================
@@ -799,9 +800,19 @@
         // =============================================
         //  END SCREEN + LEADERBOARD
         // =============================================
+        function playAgain() {
+            const lbAudio = document.getElementById('leaderboard-bgm');
+            lbAudio.pause();
+            lbAudio.currentTime = 0;
+            location.reload();
+        }
+
         function showEnd() {
-            // Start ambient waiting sound for the end screen
-            startAmbientSound();
+            // Play leaderboard background music
+            const lbAudio = document.getElementById('leaderboard-bgm');
+            lbAudio.currentTime = 0;
+            lbAudio.volume = 0.5;
+            lbAudio.play().catch(() => {});
 
             const div = document.createElement('div');
             div.className = 'overlay-screen';
@@ -821,7 +832,7 @@
                     <button id="save-btn" style="padding:12px 40px;font-size:22px;margin-top:8px">SAVE</button>`;
             } else {
                 html += buildLeaderboardHTML(lb, -1);
-                html += `<button onclick="location.reload()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
+                html += `<button onclick="playAgain()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
             }
 
             div.innerHTML = html;
@@ -845,7 +856,7 @@
                         <p style="font-size:38px;margin:8px 0;font-weight:bold">${score.toLocaleString()}</p>
                         ${bestStreak >= 5 ? `<p style="font-size:16px;color:#ff8800;margin:4px 0">Best Streak: ${bestStreak}</p>` : ''}
                         ${buildLeaderboardHTML(newLb, myIdx)}
-                        <button onclick="location.reload()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
+                        <button onclick="playAgain()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
                 };
                 saveBtn.addEventListener('click', doSave);
                 nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSave(); });

@@ -52,7 +52,6 @@
         .note.holding { box-shadow: 0 0 40px currentColor; border-color: white; }
         .note.holding .note-tail { opacity: 0.8; }
 
-        /* Hit burst animation */
         .note-burst {
             position: absolute; width: 80px; height: 80px; border-radius: 50%;
             left: 50%; margin-left: -40px; z-index: 6; pointer-events: none;
@@ -81,7 +80,6 @@
             font-size: 20px; font-weight: bold; z-index: 30; pointer-events: none;
             animation: feedbackUp 0.6s ease-out forwards;
         }
-        /* MISS feedback style */
         .miss-feedback {
             position: absolute; left: 50%; margin-left: -30px; width: 60px; text-align: center;
             font-size: 16px; font-weight: bold; z-index: 30; pointer-events: none; color: #ff4444;
@@ -126,41 +124,147 @@
             100% { opacity: 1; }
         }
 
+        /* ── START SCREEN ── */
         #start-screen, .overlay-screen {
             position: absolute; z-index: 100; text-align: center;
             background: rgba(0,0,0,0.92); width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-radius: 20px;
-            /* Allow touch events on overlay screens (end screen, start screen) */
             touch-action: auto;
+            overflow: hidden;
         }
+
+        /* Animated neon scanline background for start screen */
+        #start-screen::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 210, 255, 0.03) 3px,
+                rgba(0, 210, 255, 0.03) 4px
+            );
+            animation: scanMove 6s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scanMove {
+            from { background-position: 0 0; }
+            to   { background-position: 0 100px; }
+        }
+
+        /* Pulsing neon ring behind READY text */
+        .neon-ring {
+            position: absolute;
+            width: 220px; height: 220px;
+            border-radius: 50%;
+            border: 2px solid var(--color-s);
+            box-shadow: 0 0 30px var(--color-s), inset 0 0 30px rgba(0,210,255,0.08);
+            animation: ringPulse 2.4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .neon-ring:nth-child(2) {
+            width: 270px; height: 270px;
+            border-color: var(--color-d);
+            box-shadow: 0 0 20px var(--color-d), inset 0 0 20px rgba(255,0,127,0.05);
+            animation-duration: 3.1s; animation-delay: -1s;
+        }
+        @keyframes ringPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50%       { opacity: 0.9; transform: scale(1.04); }
+        }
+
+        /* Floating neon particles on start screen */
+        .neon-particle {
+            position: absolute; border-radius: 50%; pointer-events: none;
+            animation: particleFloat linear infinite;
+        }
+        @keyframes particleFloat {
+            0%   { transform: translateY(0) scale(1);   opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { transform: translateY(-400px) scale(0.5); opacity: 0; }
+        }
+
+        .start-title {
+            position: relative; z-index: 2;
+            font-size: 52px; font-weight: 900; letter-spacing: 6px;
+            color: var(--color-s);
+            text-shadow: 0 0 20px var(--color-s), 0 0 60px rgba(0,210,255,0.5);
+            animation: titleGlitch 4s ease-in-out infinite;
+        }
+        @keyframes titleGlitch {
+            0%, 90%, 100% { text-shadow: 0 0 20px var(--color-s), 0 0 60px rgba(0,210,255,0.5); transform: none; }
+            92% { transform: translateX(-2px); text-shadow: 2px 0 var(--color-d), -2px 0 var(--color-a); }
+            94% { transform: translateX(2px); text-shadow: -2px 0 var(--color-d), 2px 0 var(--color-a); }
+            96% { transform: none; }
+        }
+
         button {
+            position: relative; z-index: 2;
             padding: 20px 55px; font-size: 30px; background: var(--color-d);
             border: none; color: white; border-radius: 100px; cursor: pointer;
             font-weight: bold; box-shadow: 0 0 30px var(--color-d); transition: 0.2s;
         }
         button:hover { transform: scale(1.08); }
 
-        .lb-title { font-size: 18px; color: var(--color-s); margin: 15px 0 8px; }
-        .lb-list { list-style: none; padding: 0; margin: 0 0 15px; width: 80%; }
+        /* ── LEADERBOARD PANEL ── */
+        .lb-panel {
+            position: relative; z-index: 2;
+            background: rgba(0, 20, 40, 0.85);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            border-radius: 16px;
+            padding: 4px 10px 8px;
+            width: 88%;
+            box-shadow: 0 0 24px rgba(0,210,255,0.12), inset 0 0 20px rgba(0,210,255,0.03);
+        }
+        .lb-title { font-size: 15px; color: var(--color-s); margin: 10px 0 6px; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 10px var(--color-s); }
+        .lb-list { list-style: none; padding: 0; margin: 0; }
         .lb-list li {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 6px 12px; margin: 3px 0; border-radius: 8px;
-            background: rgba(255,255,255,0.05); font-size: 15px;
+            padding: 5px 10px; margin: 3px 0; border-radius: 8px;
+            background: rgba(255,255,255,0.04); font-size: 14px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
         }
-        .lb-list li.current { background: rgba(0,210,255,0.15); border: 1px solid var(--color-s); }
+        .lb-list li.current {
+            background: rgba(0,210,255,0.12);
+            border-color: var(--color-s);
+            box-shadow: 0 0 12px rgba(0,210,255,0.2);
+            animation: lbEntryPop 0.5s ease-out;
+        }
+        @keyframes lbEntryPop {
+            0% { transform: scale(0.9) translateX(-10px); opacity: 0; }
+            60% { transform: scale(1.03); }
+            100% { transform: scale(1); opacity: 1; }
+        }
         .lb-rank { color: #888; width: 24px; }
         .lb-name { flex: 1; text-align: left; margin-left: 8px; }
-        .lb-score { font-weight: bold; color: var(--color-s); }
+        .lb-score { font-weight: bold; color: var(--color-s); text-shadow: 0 0 8px var(--color-s); }
+
+        /* Leaderboard stagger animation */
+        .lb-list li:nth-child(1) { animation-delay: 0.05s; }
+        .lb-list li:nth-child(2) { animation-delay: 0.10s; }
+        .lb-list li:nth-child(3) { animation-delay: 0.15s; }
+        .lb-list li:nth-child(4) { animation-delay: 0.20s; }
+        .lb-list li:nth-child(5) { animation-delay: 0.25s; }
+
+        /* Stagger reveal for leaderboard rows */
+        .lb-reveal li {
+            opacity: 0;
+            animation: lbRowReveal 0.4s ease-out forwards;
+        }
+        @keyframes lbRowReveal {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
 
         .name-input {
             background: rgba(255,255,255,0.1); border: 2px solid var(--color-s);
             border-radius: 12px; padding: 12px 16px; font-size: 20px;
             color: white; text-align: center; outline: none; width: 200px; margin: 10px 0;
-            /* Ensure mobile keyboard and touch work */
-            touch-action: auto;
-            -webkit-user-select: text;
-            user-select: text;
+            touch-action: auto; -webkit-user-select: text; user-select: text;
+            position: relative; z-index: 2;
         }
         .name-input::placeholder { color: rgba(255,255,255,0.3); }
 
@@ -192,21 +296,309 @@
         </div>
 
         <div id="countdown"><div id="countdown-num"></div></div>
-    </div>
 
-    <div id="start-screen">
-        <h1 style="color: var(--color-s); font-size: 46px;">READY?</h1>
-        <p style="opacity:0.6; font-size:15px; margin: 8px 0 20px;">
-            <span class="desktop-hint">Use arrow keys: ← ↑ →</span>
-            <span class="mobile-hint">Tap the lanes!</span>
-            <br>Hold for long notes!
-        </p>
-        <button id="start-btn">PLAY</button>
+        <div id="start-screen">
+            <!-- Decorative neon rings -->
+            <div class="neon-ring"></div>
+            <div class="neon-ring"></div>
+            <h1 class="start-title">READY?</h1>
+            <p style="position:relative;z-index:2;opacity:0.6;font-size:15px;margin:8px 0 20px;">
+                <span class="desktop-hint">Use arrow keys: ← ↑ →</span>
+                <span class="mobile-hint">Tap the lanes!</span>
+                <br>Hold for long notes!
+            </p>
+            <button id="start-btn">PLAY</button>
+        </div>
     </div>
 
     <audio id="bgm" src="Tap_tap.mp3" preload="auto"></audio>
 
     <script>
+    // =============================================
+    //  WEB AUDIO ENGINE
+    // =============================================
+    let audioCtx = null;
+    let menuMusicNodes = null; // holds refs so we can stop them
+
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+
+    // ── Synth helpers ──────────────────────────────────────────────
+    function playTone(freq, type, startTime, duration, gainVal, ctx, dest, detune = 0) {
+        const osc = ctx.createOscillator();
+        const g   = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, startTime);
+        if (detune) osc.detune.setValueAtTime(detune, startTime);
+        g.gain.setValueAtTime(gainVal, startTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        osc.connect(g); g.connect(dest);
+        osc.start(startTime); osc.stop(startTime + duration + 0.05);
+        return osc;
+    }
+
+    function playNoise(startTime, duration, gainVal, ctx, dest, lpFreq = 4000) {
+        const bufSize = ctx.sampleRate * duration;
+        const buf  = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        const lp  = ctx.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = lpFreq;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(gainVal, startTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        src.connect(lp); lp.connect(g); g.connect(dest);
+        src.start(startTime); src.stop(startTime + duration + 0.05);
+    }
+
+    // ── REVERB ────────────────────────────────────────────────────
+    function makeReverb(ctx, seconds = 1.5, decay = 2.5) {
+        const conv = ctx.createConvolver();
+        const len  = ctx.sampleRate * seconds;
+        const buf  = ctx.createBuffer(2, len, ctx.sampleRate);
+        for (let c = 0; c < 2; c++) {
+            const d = buf.getChannelData(c);
+            for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+        }
+        conv.buffer = buf;
+        return conv;
+    }
+
+    // ── COUNTDOWN BEEPS ──────────────────────────────────────────
+    // 3 rising beeps (3, 2, 1) + GO! fanfare
+    function playCountdownBeep(number) {
+        const ctx  = getAudioCtx();
+        const dest = ctx.destination;
+        const now  = ctx.currentTime;
+
+        if (number > 0) {
+            // Pitched beep: 3→C4, 2→E4, 1→G4  (rising tension)
+            const freqs = { 3: 261.63, 2: 329.63, 1: 392.00 };
+            const freq  = freqs[number] || 300;
+
+            const rev = makeReverb(ctx, 0.8, 3);
+            rev.connect(dest);
+
+            // Main beep — sine
+            playTone(freq, 'sine',   now, 0.35, 0.55, ctx, rev);
+            // Overtone — square, quiet
+            playTone(freq * 2, 'square', now, 0.2, 0.07, ctx, rev);
+            // Noise tick
+            playNoise(now, 0.05, 0.15, ctx, dest, 8000);
+
+            // Tiny side-chain pump on bass
+            const bass = ctx.createOscillator();
+            const bg   = ctx.createGain();
+            bass.type = 'sine'; bass.frequency.value = freq * 0.5;
+            bg.gain.setValueAtTime(0.2, now);
+            bg.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+            bass.connect(bg); bg.connect(dest);
+            bass.start(now); bass.stop(now + 0.5);
+
+        } else {
+            // "GO!" — bright arpeggio chord + white noise sweep
+            const chord = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+            const rev   = makeReverb(ctx, 1.2, 2);
+            rev.connect(dest);
+
+            chord.forEach((f, i) => {
+                const t = now + i * 0.055;
+                playTone(f, 'sine',   t, 0.6 - i * 0.05, 0.4, ctx, rev);
+                playTone(f, 'square', t, 0.3,             0.04, ctx, rev);
+            });
+            // Sweep noise
+            const noiseNode = ctx.createOscillator();
+            noiseNode.type = 'sawtooth';
+            noiseNode.frequency.setValueAtTime(80, now);
+            noiseNode.frequency.exponentialRampToValueAtTime(800, now + 0.25);
+            const ng = ctx.createGain();
+            ng.gain.setValueAtTime(0.12, now);
+            ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+            noiseNode.connect(ng); ng.connect(dest);
+            noiseNode.start(now); noiseNode.stop(now + 0.35);
+        }
+    }
+
+    // ── MENU AMBIENT MUSIC ────────────────────────────────────────
+    // Cyberpunk pad: slow chord stabs + arpeggiated high notes + sub bass pulse
+    function startMenuMusic() {
+        const ctx  = getAudioCtx();
+        const dest = ctx.destination;
+
+        // Master gain for menu music
+        const masterGain = ctx.createGain();
+        masterGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        masterGain.gain.linearRampToValueAtTime(0.85, ctx.currentTime + 2.0); // fade in
+        masterGain.connect(dest);
+
+        const rev = makeReverb(ctx, 3.5, 1.8);
+        rev.connect(masterGain);
+
+        const delay = ctx.createDelay(1.0);
+        delay.delayTime.value = 0.375; // 1/4 note at 160bpm
+        const delayFeedback = ctx.createGain();
+        delayFeedback.gain.value = 0.4;
+        delay.connect(delayFeedback);
+        delayFeedback.connect(delay);
+        delay.connect(masterGain);
+
+        const stopTokens = []; // collect all interval/timeout ids to cancel
+
+        // ── SUB BASS PULSE (every beat ~0.375s @ 160bpm)
+        let bassPhase = 0;
+        const bassNotes = [65.41, 73.42, 82.41, 73.42]; // C2 D2 E2 D2
+        const bassInterval = setInterval(() => {
+            const now = ctx.currentTime;
+            const freq = bassNotes[bassPhase % bassNotes.length];
+            bassPhase++;
+
+            const osc = ctx.createOscillator();
+            const g   = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            g.gain.setValueAtTime(0.4, now);
+            g.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+            osc.connect(g); g.connect(masterGain);
+            osc.start(now); osc.stop(now + 0.4);
+
+            // Sub harmonic
+            const sub = ctx.createOscillator();
+            const sg  = ctx.createGain();
+            sub.type = 'sine';
+            sub.frequency.setValueAtTime(freq * 0.5, now);
+            sg.gain.setValueAtTime(0.18, now);
+            sg.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+            sub.connect(sg); sg.connect(masterGain);
+            sub.start(now); sub.stop(now + 0.45);
+        }, 375);
+        stopTokens.push({ type: 'interval', id: bassInterval });
+
+        // ── NEON PAD (long chords, change every 4 beats = 1.5s)
+        const chords = [
+            [261.63, 329.63, 392.00, 523.25],  // C maj
+            [293.66, 369.99, 440.00, 587.33],  // D maj
+            [329.63, 415.30, 493.88, 659.25],  // E maj
+            [293.66, 369.99, 440.00, 587.33],  // D maj
+        ];
+        let chordPhase = 0;
+        const padInterval = setInterval(() => {
+            const now = ctx.currentTime;
+            const chord = chords[chordPhase % chords.length];
+            chordPhase++;
+
+            chord.forEach((f, i) => {
+                const osc = ctx.createOscillator();
+                const g   = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(f, now);
+                osc.detune.setValueAtTime((i % 2 === 0 ? -8 : 8), now); // slight detune chorus
+                g.gain.setValueAtTime(0.0001, now);
+                g.gain.linearRampToValueAtTime(0.055, now + 0.3);
+                g.gain.setValueAtTime(0.055, now + 1.2);
+                g.gain.linearRampToValueAtTime(0.0001, now + 1.6);
+
+                const lp = ctx.createBiquadFilter();
+                lp.type = 'lowpass';
+                lp.frequency.setValueAtTime(800, now);
+                lp.frequency.linearRampToValueAtTime(2200, now + 0.5);
+                lp.Q.value = 4;
+
+                osc.connect(lp); lp.connect(g); g.connect(rev);
+                osc.start(now); osc.stop(now + 1.8);
+            });
+        }, 1500);
+        stopTokens.push({ type: 'interval', id: padInterval });
+
+        // ── ARPEGGIO (high sparkle notes, 16th notes)
+        const arpNotes   = [1046.5, 1318.5, 1567.98, 1318.5, 1046.5, 783.99, 1046.5, 880.00];
+        let arpPhase = 0;
+        const arpInterval = setInterval(() => {
+            if (Math.random() < 0.45) { arpPhase++; return; } // random gaps for vibe
+            const now  = ctx.currentTime;
+            const freq = arpNotes[arpPhase % arpNotes.length];
+            arpPhase++;
+
+            playTone(freq, 'sine', now, 0.18, 0.06, ctx, rev, Math.random() * 10 - 5);
+            playTone(freq, 'square', now, 0.08, 0.012, ctx, delay);
+        }, 187); // 16th note at 160bpm
+        stopTokens.push({ type: 'interval', id: arpInterval });
+
+        // ── GLITCH STAB (random, every ~2–5 s)
+        function scheduleGlitch() {
+            const wait = 2000 + Math.random() * 3000;
+            const t = setTimeout(() => {
+                if (!menuMusicNodes) return; // stopped
+                const ctx2 = getAudioCtx();
+                const now  = ctx2.currentTime;
+                const glitchFreqs = [1174.66, 1396.91, 1760.0];
+                glitchFreqs.forEach((f, i) => {
+                    playTone(f, 'square', now + i * 0.03, 0.1, 0.035, ctx2, rev);
+                });
+                playNoise(now, 0.06, 0.08, ctx2, masterGain, 12000);
+                scheduleGlitch();
+            }, wait);
+            stopTokens.push({ type: 'timeout', id: t });
+        }
+        scheduleGlitch();
+
+        menuMusicNodes = { masterGain, stopTokens };
+    }
+
+    function stopMenuMusic() {
+        if (!menuMusicNodes) return;
+        const ctx = getAudioCtx();
+        // Fade out
+        menuMusicNodes.masterGain.gain.setValueAtTime(menuMusicNodes.masterGain.gain.value, ctx.currentTime);
+        menuMusicNodes.masterGain.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+        // Clear intervals / timeouts
+        for (const token of menuMusicNodes.stopTokens) {
+            if (token.type === 'interval') clearInterval(token.id);
+            else clearTimeout(token.id);
+        }
+        menuMusicNodes = null;
+    }
+
+    // ── LEADERBOARD FANFARE ───────────────────────────────────────
+    function playLeaderboardFanfare() {
+        const ctx  = getAudioCtx();
+        const dest = ctx.destination;
+        const now  = ctx.currentTime;
+
+        const rev = makeReverb(ctx, 2.5, 2);
+        rev.connect(dest);
+
+        // Rising arp sweep
+        const fanfare = [
+            { f: 392.00, t: 0.00 },
+            { f: 493.88, t: 0.08 },
+            { f: 587.33, t: 0.16 },
+            { f: 783.99, t: 0.24 },
+            { f: 987.77, t: 0.35 },
+            { f: 1174.66,t: 0.46 },
+        ];
+        fanfare.forEach(({ f, t }) => {
+            playTone(f, 'sine',     now + t, 0.5, 0.35, ctx, rev);
+            playTone(f * 2, 'sine', now + t, 0.25, 0.08, ctx, rev);
+        });
+
+        // Final chord stab
+        const finalChord = [523.25, 659.25, 783.99];
+        finalChord.forEach(f => {
+            playTone(f, 'sawtooth', now + 0.6, 0.8, 0.08, ctx, rev, -5);
+            playTone(f, 'sawtooth', now + 0.6, 0.8, 0.08, ctx, rev,  5);
+        });
+
+        // Noise burst
+        playNoise(now + 0.6, 0.12, 0.12, ctx, dest, 6000);
+
+        // Sub thump
+        playTone(65.41, 'sine', now + 0.6, 0.5, 0.35, ctx, dest);
+    }
+
         // =============================================
         //  CONFIG
         // =============================================
@@ -274,10 +666,9 @@
         }
 
         // =============================================
-        //  LEVEL DATA (first line removed per request)
+        //  LEVEL DATA
         // =============================================
         const levelData = [
-          //  {time:0.6,dur:0.2,lane:2},{time:0.8,dur:0.1,lane:2},
             {time:1.0,dur:0.1,lane:2},
             {time:1.3,dur:0.1,lane:2},{time:1.5,dur:0.8,lane:2},{time:1.7,dur:0.3,lane:0},
             {time:2.1,dur:0.2,lane:0},{time:2.3,dur:0.2,lane:2},{time:2.6,dur:0.3,lane:2},
@@ -306,12 +697,42 @@
         }
 
         // =============================================
+        //  START SCREEN PARTICLES
+        // =============================================
+        function spawnMenuParticles() {
+            const screen = document.getElementById('start-screen');
+            if (!screen) return;
+            const colors = ['#39ff14', '#00d2ff', '#ff007f', '#ffffff'];
+            for (let i = 0; i < 18; i++) {
+                const p = document.createElement('div');
+                p.className = 'neon-particle';
+                const size = 3 + Math.random() * 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                p.style.cssText = `
+                    width:${size}px; height:${size}px;
+                    left:${Math.random() * 100}%;
+                    bottom:${-10 + Math.random() * 20}px;
+                    background:${color};
+                    box-shadow: 0 0 ${size * 2}px ${color};
+                    animation-duration:${3 + Math.random() * 5}s;
+                    animation-delay:${Math.random() * 5}s;
+                `;
+                screen.appendChild(p);
+            }
+        }
+        spawnMenuParticles();
+
+        // =============================================
         //  COUNTDOWN + PRE-SCROLL
         // =============================================
         startBtn.addEventListener('click', () => {
+            // כאן יש אינטראקציה — מפעיל AudioContext, מנגן רגע קצר ואז עוצר
+            getAudioCtx();
+            startMenuMusic();
             document.getElementById('start-screen').style.display = 'none';
+            setTimeout(() => stopMenuMusic(), 400);
 
-            // FIX: Unlock audio on mobile — play+pause during user gesture
+            // Unlock audio on mobile
             audio.volume = 0;
             audio.play().then(() => {
                 audio.pause();
@@ -347,6 +768,10 @@
         function startCountdown() {
             countdownEl.style.display = 'flex';
             let count = COUNTDOWN_SEC;
+
+            // Play first beep immediately
+            playCountdownBeep(count);
+
             function tick() {
                 if (count > 0) {
                     countdownNumEl.textContent = count;
@@ -354,8 +779,17 @@
                     void countdownNumEl.offsetWidth;
                     countdownNumEl.style.animation = 'countPulse 0.8s ease-out';
                     count--;
-                    setTimeout(tick, 1000);
+                    if (count > 0) {
+                        setTimeout(() => {
+                            playCountdownBeep(count);
+                            tick();
+                        }, 1000);
+                    } else {
+                        setTimeout(tick, 1000);
+                    }
                 } else {
+                    // GO!
+                    playCountdownBeep(0);
                     countdownNumEl.textContent = 'GO!';
                     countdownNumEl.style.animation = 'none';
                     void countdownNumEl.offsetWidth;
@@ -371,15 +805,12 @@
         }
 
         function startGame() {
-            // FIX: Wait for audio to actually start playing, then sync timer to it
             audio.currentTime = 0;
             audio.play().then(() => {
-                // Audio is now truly playing — start game timer from NOW
                 gameActive = true;
                 gameStartTime = performance.now();
                 requestAnimationFrame(gameLoop);
             }).catch(() => {
-                // Audio failed — fall back to original timing
                 gameActive = true;
                 gameStartTime = preScrollStartTime + PRE_SCROLL_SEC * 1000;
                 requestAnimationFrame(gameLoop);
@@ -414,18 +845,15 @@
             for (const n of notes) {
                 if (n.state === 'done' || n.state === 'miss') continue;
 
-                // FIX: Held notes — pin to hit line, shrink tail
                 if (n.state === 'held') {
                     const isHeld = heldKeys.has(n.lane) || isTouchHeld(n.lane);
                     const endTime = n.time + n.dur;
                     const elapsed = t - n.holdStart;
                     const ticks = Math.floor(elapsed / 0.12);
 
-                    // Pin at hit line instead of continuing to scroll
                     n.el.style.top = HIT_LINE_Y + 'px';
                     n.y = HIT_LINE_Y;
 
-                    // Shrink tail as hold progresses
                     const tailEl = n.el.querySelector('.note-tail');
                     if (tailEl) {
                         const remaining = Math.max(0, endTime - t);
@@ -440,7 +868,7 @@
                     if (!isHeld || t >= endTime) {
                         n.state = 'done';
                         showBurst(n.lane, HIT_LINE_Y);
-                        n.el.remove(); // FIX: remove from DOM completely
+                        n.el.remove();
                         if (t >= endTime - 0.15) {
                             score += 100;
                             scoreEl.innerText = score;
@@ -450,7 +878,6 @@
                     continue;
                 }
 
-                // Normal scrolling for active/wait notes
                 const y = timeToY(t, n.time);
                 n.y = y;
 
@@ -458,7 +885,6 @@
                 n.el.style.display = '';
                 n.el.style.top = y + 'px';
 
-                // FIX: Miss — show MISS text, remove from DOM
                 if (y > HIT_LINE_Y + HIT_WINDOW + 20) {
                     n.state = 'miss';
                     combo = 0;
@@ -529,7 +955,6 @@
         }
 
         gameBoard.addEventListener('touchstart', e => {
-            // Don't block touch on overlay screens (end screen input/buttons)
             if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
             e.preventDefault();
             for (const touch of e.changedTouches) {
@@ -612,13 +1037,11 @@
             showFeedback(lane, txt, clr);
 
             if (best.isLong) {
-                // Long note — pin to hit line, start hold
                 best.state = 'held';
                 best.holdStart = getTime();
                 best.el.classList.add('holding');
-                best.el.style.top = HIT_LINE_Y + 'px'; // FIX: pin immediately
+                best.el.style.top = HIT_LINE_Y + 'px';
             } else {
-                // FIX: Short note — burst + remove from DOM completely
                 best.state = 'done';
                 showBurst(lane, best.y);
                 best.el.remove();
@@ -626,7 +1049,7 @@
         }
 
         // =============================================
-        //  BURST EFFECT (when note is hit)
+        //  BURST EFFECT
         // =============================================
         function showBurst(lane, yPos) {
             const burst = document.createElement('div');
@@ -651,7 +1074,6 @@
             setTimeout(() => el.remove(), 600);
         }
 
-        // FIX: Show MISS text when a note is missed
         function showMiss(lane, yPos) {
             const el = document.createElement('div');
             el.className = 'miss-feedback';
@@ -683,26 +1105,29 @@
         //  END SCREEN + LEADERBOARD
         // =============================================
         function showEnd() {
-            // Re-enable touch on the game board area for the overlay
+            // פנפרה + חזרת מוזיקת תפריט אחרי הפנפרה
+            setTimeout(() => playLeaderboardFanfare(), 300);
+            setTimeout(() => startMenuMusic(), 1800);
+
             const div = document.createElement('div');
             div.className = 'overlay-screen';
 
             const lb = getLeaderboard();
             const isTopScore = lb.length < 10 || score > (lb[lb.length - 1]?.score || 0);
 
-            let html = `<h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px">GAME OVER</h1>`;
-            html += `<p style="font-size:38px;margin:8px 0;font-weight:bold">${score.toLocaleString()}</p>`;
-            if (bestStreak >= 5) html += `<p style="font-size:16px;color:#ff8800;margin:4px 0">Best Streak: ${bestStreak}</p>`;
+            let html = `<h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px;position:relative;z-index:2;">GAME OVER</h1>`;
+            html += `<p style="font-size:38px;margin:8px 0;font-weight:bold;position:relative;z-index:2;">${score.toLocaleString()}</p>`;
+            if (bestStreak >= 5) html += `<p style="font-size:16px;color:#ff8800;margin:4px 0;position:relative;z-index:2;">Best Streak: ${bestStreak}</p>`;
 
             if (isTopScore && score > 0) {
                 html += `
-                    <p style="font-size:14px;color:var(--color-a);margin:10px 0 5px">New high score! Enter your name:</p>
+                    <p style="font-size:14px;color:var(--color-a);margin:10px 0 5px;position:relative;z-index:2;">New high score! Enter your name:</p>
                     <input class="name-input" id="name-input" type="text" placeholder="Your name" maxlength="12"
                            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
                     <button id="save-btn" style="padding:12px 40px;font-size:22px;margin-top:8px">SAVE</button>`;
             } else {
                 html += buildLeaderboardHTML(lb, -1);
-                html += `<button onclick="location.reload()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
+                html += `<button onclick="stopMenuMusic();location.reload()" style="margin-top:12px;padding:14px 45px;font-size:24px;position:relative;z-index:2;">PLAY AGAIN</button>`;
             }
 
             div.innerHTML = html;
@@ -712,7 +1137,6 @@
                 const saveBtn = document.getElementById('save-btn');
                 const nameInput = document.getElementById('name-input');
 
-                // Focus with delay to ensure mobile keyboard opens
                 setTimeout(() => {
                     nameInput.focus();
                     nameInput.click();
@@ -723,11 +1147,11 @@
                     const newLb = addToLeaderboard(name, score);
                     const myIdx = newLb.findIndex(e => e.score === score && e.name === name);
                     div.innerHTML = `
-                        <h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px">GAME OVER</h1>
-                        <p style="font-size:38px;margin:8px 0;font-weight:bold">${score.toLocaleString()}</p>
-                        ${bestStreak >= 5 ? `<p style="font-size:16px;color:#ff8800;margin:4px 0">Best Streak: ${bestStreak}</p>` : ''}
+                        <h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px;position:relative;z-index:2;">GAME OVER</h1>
+                        <p style="font-size:38px;margin:8px 0;font-weight:bold;position:relative;z-index:2;">${score.toLocaleString()}</p>
+                        ${bestStreak >= 5 ? `<p style="font-size:16px;color:#ff8800;margin:4px 0;position:relative;z-index:2;">Best Streak: ${bestStreak}</p>` : ''}
                         ${buildLeaderboardHTML(newLb, myIdx)}
-                        <button onclick="location.reload()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
+                        <button onclick="stopMenuMusic();location.reload()" style="margin-top:12px;padding:14px 45px;font-size:24px;position:relative;z-index:2;">PLAY AGAIN</button>`;
                 };
                 saveBtn.addEventListener('click', doSave);
                 nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSave(); });
@@ -737,14 +1161,14 @@
         function buildLeaderboardHTML(lb, highlightIdx) {
             if (lb.length === 0) return '';
             const medals = ['🥇', '🥈', '🥉'];
-            let html = `<div class="lb-title">LEADERBOARD</div><ul class="lb-list">`;
+            let html = `<div class="lb-panel"><div class="lb-title">⚡ LEADERBOARD ⚡</div><ul class="lb-list lb-reveal">`;
             lb.forEach((entry, i) => {
-                html += `<li class="${i === highlightIdx ? 'current' : ''}">
+                html += `<li class="${i === highlightIdx ? 'current' : ''}" style="animation-delay:${i * 0.07}s">
                     <span class="lb-rank">${medals[i] || (i + 1)}</span>
                     <span class="lb-name">${escHtml(entry.name)}</span>
                     <span class="lb-score">${entry.score.toLocaleString()}</span></li>`;
             });
-            return html + `</ul>`;
+            return html + `</ul></div>`;
         }
 
         function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }

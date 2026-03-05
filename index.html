@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="he" dir="ltr">
 <head>
     <meta charset="UTF-8">
@@ -16,13 +17,11 @@
         #score-container { font-size: 48px; font-weight: bold; margin-bottom: 2px; color: #fff; text-shadow: 0 0 20px var(--color-s); }
         #combo-display { font-size: 20px; height: 28px; margin-bottom: 4px; transition: all 0.15s; }
         #streak-display { font-size: 16px; height: 22px; margin-bottom: 4px; color: #ff6600; }
-
         #game-board {
             position: relative; width: 340px; height: 600px;
             background: #0a0a1a; border: 4px solid #1a1a2e; border-radius: 20px;
             display: flex; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
-
         @media (max-width: 400px) {
             #game-board { width: 100vw; height: 75dvh; border-radius: 0; border-left: none; border-right: none; }
             #score-container { font-size: 36px; }
@@ -31,13 +30,10 @@
         @media (min-width: 401px) and (max-height: 700px) {
             #game-board { height: 500px; }
         }
-
         .lane { position: relative; flex: 1; border-right: 1px solid rgba(255,255,255,0.05); }
         .lane:last-child { border-right: none; }
         .lane-flash { background: rgba(255,255,255,0.15) !important; }
-
         .hit-line { position: absolute; bottom: 80px; width: 100%; height: 4px; background: rgba(255,255,255,0.5); box-shadow: 0 0 15px #fff; z-index: 10; }
-
         .note {
             position: absolute; width: 60px; height: 60px; border-radius: 50%;
             left: 50%; margin-left: -30px; z-index: 5;
@@ -51,7 +47,6 @@
         }
         .note.holding { box-shadow: 0 0 40px currentColor; border-color: white; }
         .note.holding .note-tail { opacity: 0.8; }
-
         .note-burst {
             position: absolute; width: 80px; height: 80px; border-radius: 50%;
             left: 50%; margin-left: -40px; z-index: 6; pointer-events: none;
@@ -61,7 +56,6 @@
             0% { transform: scale(0.5); opacity: 0.9; }
             100% { transform: scale(1.8); opacity: 0; }
         }
-
         .key-visual {
             position: absolute; bottom: 10px; width: 60px; height: 60px;
             border: 3px solid white; border-radius: 50%; left: 50%; margin-left: -30px;
@@ -69,12 +63,10 @@
             font-weight: bold; font-size: 28px; opacity: 0.4; z-index: 20;
         }
         .key-active { background: white !important; color: black !important; opacity: 1 !important; box-shadow: 0 0 30px white; }
-
         .touch-zone {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
             z-index: 25; cursor: pointer;
         }
-
         .hit-feedback {
             position: absolute; left: 50%; margin-left: -40px; width: 80px; text-align: center;
             font-size: 20px; font-weight: bold; z-index: 30; pointer-events: none;
@@ -107,7 +99,6 @@
             80% { opacity: 1; }
             100% { opacity: 0; transform: translateX(-50%) translateY(-30px); }
         }
-
         #countdown {
             position: absolute; z-index: 150; width: 100%; height: 100%;
             display: none; align-items: center; justify-content: center;
@@ -123,7 +114,6 @@
             30% { transform: scale(1); opacity: 1; }
             100% { opacity: 1; }
         }
-
         #start-screen, .overlay-screen {
             position: absolute; z-index: 100; text-align: center;
             background: rgba(0,0,0,0.92); width: 100%; height: 100%;
@@ -137,7 +127,6 @@
             font-weight: bold; box-shadow: 0 0 30px var(--color-d); transition: 0.2s;
         }
         button:hover { transform: scale(1.08); }
-
         .lb-title { font-size: 18px; color: var(--color-s); margin: 15px 0 8px; }
         .lb-list { list-style: none; padding: 0; margin: 0 0 15px; width: 80%; }
         .lb-list li {
@@ -149,17 +138,13 @@
         .lb-rank { color: #888; width: 24px; }
         .lb-name { flex: 1; text-align: left; margin-left: 8px; }
         .lb-score { font-weight: bold; color: var(--color-s); }
-
         .name-input {
             background: rgba(255,255,255,0.1); border: 2px solid var(--color-s);
             border-radius: 12px; padding: 12px 16px; font-size: 20px;
             color: white; text-align: center; outline: none; width: 200px; margin: 10px 0;
-            touch-action: auto;
-            -webkit-user-select: text;
-            user-select: text;
+            touch-action: auto; -webkit-user-select: text; user-select: text;
         }
         .name-input::placeholder { color: rgba(255,255,255,0.3); }
-
         .mobile-hint { display: none; }
         @media (pointer: coarse) {
             .mobile-hint { display: inline; }
@@ -169,714 +154,699 @@
 </head>
 <body>
 
-    <div id="streak-display"></div>
-    <div id="combo-display"></div>
-    <div id="score-container">0</div>
-    <div id="game-board">
-        <div class="hit-line"></div>
-        <div class="lane" id="lane-0" style="color: var(--color-a);">
-            <div class="key-visual">←</div>
-            <div class="touch-zone" data-lane="0"></div>
-        </div>
-        <div class="lane" id="lane-1" style="color: var(--color-s);">
-            <div class="key-visual">↑</div>
-            <div class="touch-zone" data-lane="1"></div>
-        </div>
-        <div class="lane" id="lane-2" style="color: var(--color-d);">
-            <div class="key-visual">→</div>
-            <div class="touch-zone" data-lane="2"></div>
-        </div>
-
-        <div id="countdown"><div id="countdown-num"></div></div>
+```
+<div id="streak-display"></div>
+<div id="combo-display"></div>
+<div id="score-container">0</div>
+<div id="game-board">
+    <div class="hit-line"></div>
+    <div class="lane" id="lane-0" style="color: var(--color-a);">
+        <div class="key-visual">←</div>
+        <div class="touch-zone" data-lane="0"></div>
     </div>
-
-    <div id="start-screen">
-        <h1 style="color: var(--color-s); font-size: 46px;">READY?</h1>
-        <p style="opacity:0.6; font-size:15px; margin: 8px 0 20px;">
-            <span class="desktop-hint">Use arrow keys: ← ↑ →</span>
-            <span class="mobile-hint">Tap the lanes!</span>
-            <br>Hold for long notes!
-        </p>
-        <button id="start-btn">PLAY</button>
+    <div class="lane" id="lane-1" style="color: var(--color-s);">
+        <div class="key-visual">↑</div>
+        <div class="touch-zone" data-lane="1"></div>
     </div>
+    <div class="lane" id="lane-2" style="color: var(--color-d);">
+        <div class="key-visual">→</div>
+        <div class="touch-zone" data-lane="2"></div>
+    </div>
+    <div id="countdown"><div id="countdown-num"></div></div>
+</div>
 
-    <audio id="bgm" src="Tap_tap.mp3" preload="auto"></audio>
-    <audio id="leaderboard-bgm" src="leaderboard.wav" preload="auto" loop></audio>
+<div id="start-screen">
+    <h1 style="color: var(--color-s); font-size: 46px;">READY?</h1>
+    <p style="opacity:0.6; font-size:15px; margin: 8px 0 20px;">
+        <span class="desktop-hint">Use arrow keys: ← ↑ →</span>
+        <span class="mobile-hint">Tap the lanes!</span>
+        <br>Hold for long notes!
+    </p>
+    <button id="start-btn">PLAY</button>
+</div>
 
-    <script>
-        // =============================================
-        //  CONFIG
-        // =============================================
-        const HIT_LINE_Y     = 520;
-        const HIT_WINDOW     = 100;
-        const LONG_THRESHOLD = 0.3;
-        const LEAD_SEC       = 2.0;
-        const COUNTDOWN_SEC  = 3;
-        const PRE_SCROLL_SEC = COUNTDOWN_SEC + 0.6;
+<audio id="bgm" src="Tap_tap.mp3" preload="auto"></audio>
+<audio id="leaderboard-bgm" src="leaderboard.wav" preload="auto" loop></audio>
 
-        const STREAK_MILESTONES = [
-            { at: 10,  bonus: 500,   label: '10 STREAK! +500' },
-            { at: 20,  bonus: 1000,  label: '20 STREAK! +1000' },
-            { at: 30,  bonus: 2000,  label: '30 STREAK! +2000' },
-            { at: 40,  bonus: 3000,  label: '40 STREAK! +3000' },
-            { at: 50,  bonus: 5000,  label: '50 STREAK! +5000' },
-            { at: 60,  bonus: 8000,  label: 'FULL COMBO?! +8000' },
-        ];
+<script>
+    // =============================================
+    //  CONFIG
+    // =============================================
+    const HIT_LINE_Y     = 520;
+    const HIT_WINDOW     = 100;
+    const LONG_THRESHOLD = 0.3;
+    const LEAD_SEC       = 2.0;
+    const COUNTDOWN_SEC  = 3;
+    const PRE_SCROLL_SEC = COUNTDOWN_SEC + 0.6;
 
-        const LANE_COLORS = ['var(--color-a)', 'var(--color-s)', 'var(--color-d)'];
-        const LANE_HEX    = ['#39ff14', '#00d2ff', '#ff007f'];
-        const KEY_TO_LANE = { 'arrowleft': 0, 'arrowup': 1, 'arrowright': 2 };
+    const STREAK_MILESTONES = [
+        { at: 10,  bonus: 500,   label: '10 STREAK! +500' },
+        { at: 20,  bonus: 1000,  label: '20 STREAK! +1000' },
+        { at: 30,  bonus: 2000,  label: '30 STREAK! +2000' },
+        { at: 40,  bonus: 3000,  label: '40 STREAK! +3000' },
+        { at: 50,  bonus: 5000,  label: '50 STREAK! +5000' },
+        { at: 60,  bonus: 8000,  label: 'FULL COMBO?! +8000' },
+    ];
 
-        // =============================================
-        //  ELEMENTS
-        // =============================================
-        const audio      = document.getElementById('bgm');
-        const startBtn   = document.getElementById('start-btn');
-        const scoreEl    = document.getElementById('score-container');
-        const comboEl    = document.getElementById('combo-display');
-        const streakEl   = document.getElementById('streak-display');
-        const gameBoard  = document.getElementById('game-board');
-        const countdownEl    = document.getElementById('countdown');
-        const countdownNumEl = document.getElementById('countdown-num');
-        const lanesEls   = [document.getElementById('lane-0'), document.getElementById('lane-1'), document.getElementById('lane-2')];
-        const keyVisuals = document.querySelectorAll('.key-visual');
+    const LANE_COLORS = ['var(--color-a)', 'var(--color-s)', 'var(--color-d)'];
+    const LANE_HEX    = ['#39ff14', '#00d2ff', '#ff007f'];
+    const KEY_TO_LANE = { 'arrowleft': 0, 'arrowup': 1, 'arrowright': 2 };
 
-        // =============================================
-        //  STATE
-        // =============================================
-        let score = 0, combo = 0, bestStreak = 0, gameActive = false, gameStartTime = 0;
-        let preScrolling = false, preScrollStartTime = 0;
-        const heldKeys = new Set();
-        const activeTouches = new Map();
-        let notes = [];
-        let streakMilestonesHit = new Set();
+    // =============================================
+    //  ELEMENTS
+    // =============================================
+    const audio      = document.getElementById('bgm');
+    const lbAudio    = document.getElementById('leaderboard-bgm');
+    const startBtn   = document.getElementById('start-btn');
+    const scoreEl    = document.getElementById('score-container');
+    const comboEl    = document.getElementById('combo-display');
+    const streakEl   = document.getElementById('streak-display');
+    const gameBoard  = document.getElementById('game-board');
+    const countdownEl    = document.getElementById('countdown');
+    const countdownNumEl = document.getElementById('countdown-num');
+    const lanesEls   = [document.getElementById('lane-0'), document.getElementById('lane-1'), document.getElementById('lane-2')];
+    const keyVisuals = document.querySelectorAll('.key-visual');
 
-        // Start ambient sound on first user interaction (needed for mobile audio unlock)
-        document.addEventListener('pointerdown', function firstTouch() {
-            document.removeEventListener('pointerdown', firstTouch);
-            getAudioCtx();
-            startAmbientSound();
+    // =============================================
+    //  STATE
+    // =============================================
+    let score = 0, combo = 0, bestStreak = 0, gameActive = false, gameStartTime = 0;
+    let preScrolling = false, preScrollStartTime = 0;
+    const heldKeys = new Set();
+    const activeTouches = new Map();
+    let notes = [];
+    let streakMilestonesHit = new Set();
+
+    // =============================================
+    //  MOBILE AUDIO UNLOCK SYSTEM
+    // =============================================
+    // iOS Safari blocks ALL audio until a user gesture (touch/click)
+    // triggers play() on each <audio> element AND resumes AudioContext.
+    // We must unlock everything in the SAME call stack as the gesture.
+    let audioCtx = null;
+    let audioUnlocked = false;
+
+    function getAudioCtx() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        // iOS may create context in "suspended" state — resume it
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+        }
+        return audioCtx;
+    }
+
+    // Call this inside a user-gesture handler to unlock all audio
+    function unlockAllAudio() {
+        if (audioUnlocked) return;
+        audioUnlocked = true;
+
+        // 1. Create + resume AudioContext
+        getAudioCtx();
+
+        // 2. Unlock every <audio> element with play→immediate pause
+        //    This must happen synchronously inside the gesture handler
+        [audio, lbAudio].forEach(el => {
+            const vol = el.volume;
+            el.volume = 0;
+            el.muted = true;
+            const p = el.play();
+            if (p && p.then) {
+                p.then(() => {
+                    el.pause();
+                    el.currentTime = 0;
+                    el.volume = vol;
+                    el.muted = false;
+                }).catch(() => {
+                    el.volume = vol;
+                    el.muted = false;
+                });
+            }
         });
+    }
 
-        // =============================================
-        //  COUNTDOWN SOUND (Web Audio API)
-        // =============================================
-        let audioCtx = null;
-        function getAudioCtx() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            return audioCtx;
+    // Unlock on the very first touch/click anywhere on page
+    function onFirstInteraction() {
+        document.removeEventListener('touchstart', onFirstInteraction, true);
+        document.removeEventListener('mousedown', onFirstInteraction, true);
+        document.removeEventListener('click', onFirstInteraction, true);
+        unlockAllAudio();
+        // Start ambient waiting sound after unlock
+        startAmbientSound();
+    }
+    document.addEventListener('touchstart', onFirstInteraction, true);
+    document.addEventListener('mousedown', onFirstInteraction, true);
+    document.addEventListener('click', onFirstInteraction, true);
+
+    // =============================================
+    //  AMBIENT WAITING SOUND (Web Audio oscillators)
+    // =============================================
+    let ambientNodes = null;
+
+    function startAmbientSound() {
+        if (ambientNodes) return;
+        try {
+            const ctx = getAudioCtx();
+            const master = ctx.createGain();
+            master.gain.setValueAtTime(0, ctx.currentTime);
+            master.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 1.5);
+            master.connect(ctx.destination);
+
+            const pad1 = ctx.createOscillator();
+            pad1.type = 'sine'; pad1.frequency.value = 110;
+            const pad1g = ctx.createGain(); pad1g.gain.value = 0.35;
+            pad1.connect(pad1g); pad1g.connect(master); pad1.start();
+
+            const pad2 = ctx.createOscillator();
+            pad2.type = 'triangle'; pad2.frequency.value = 220;
+            const pad2g = ctx.createGain(); pad2g.gain.value = 0.15;
+            pad2.connect(pad2g); pad2g.connect(master); pad2.start();
+
+            const pad3 = ctx.createOscillator();
+            pad3.type = 'sine'; pad3.frequency.value = 330;
+            const pad3g = ctx.createGain(); pad3g.gain.value = 0.08;
+            pad3.connect(pad3g); pad3g.connect(master); pad3.start();
+
+            const lfo = ctx.createOscillator();
+            lfo.type = 'sine'; lfo.frequency.value = 0.3;
+            const lfoG = ctx.createGain(); lfoG.gain.value = 0.06;
+            lfo.connect(lfoG); lfoG.connect(pad2g.gain); lfo.start();
+
+            const lfo2 = ctx.createOscillator();
+            lfo2.type = 'sine'; lfo2.frequency.value = 0.15;
+            const lfo2G = ctx.createGain(); lfo2G.gain.value = 3;
+            lfo2.connect(lfo2G); lfo2G.connect(pad3.detune); lfo2.start();
+
+            ambientNodes = { master, oscs: [pad1, pad2, pad3, lfo, lfo2], ctx };
+        } catch (e) {}
+    }
+
+    function stopAmbientSound() {
+        if (!ambientNodes) return;
+        try {
+            const { master, oscs, ctx } = ambientNodes;
+            master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.8);
+            setTimeout(() => {
+                oscs.forEach(o => { try { o.stop(); } catch(e) {} });
+            }, 900);
+        } catch (e) {}
+        ambientNodes = null;
+    }
+
+    // =============================================
+    //  COUNTDOWN BEEP
+    // =============================================
+    function playCountdownBeep(isGo) {
+        try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            if (isGo) {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.setValueAtTime(1320, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.4);
+            } else {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(660, ctx.currentTime);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.15);
+            }
+        } catch (e) {}
+    }
+
+    // =============================================
+    //  LEADERBOARD
+    // =============================================
+    const LB_KEY = 'taptap_leaderboard';
+    function getLeaderboard() {
+        try { return JSON.parse(localStorage.getItem(LB_KEY)) || []; } catch { return []; }
+    }
+    function saveLeaderboard(lb) {
+        try { localStorage.setItem(LB_KEY, JSON.stringify(lb)); } catch {}
+    }
+    function addToLeaderboard(name, sc) {
+        const lb = getLeaderboard();
+        lb.push({ name, score: sc, date: Date.now() });
+        lb.sort((a, b) => b.score - a.score);
+        if (lb.length > 10) lb.length = 10;
+        saveLeaderboard(lb);
+        return lb;
+    }
+
+    // =============================================
+    //  LEVEL DATA
+    // =============================================
+    const levelData = [
+        {time:1.0,dur:0.1,lane:2},
+        {time:1.3,dur:0.1,lane:2},{time:1.5,dur:0.8,lane:2},{time:1.7,dur:0.3,lane:0},
+        {time:2.1,dur:0.2,lane:0},{time:2.3,dur:0.2,lane:2},{time:2.6,dur:0.3,lane:2},
+        {time:3.0,dur:1.4,lane:2},{time:3.4,dur:0.3,lane:0},{time:3.9,dur:0.2,lane:1},
+        {time:4.5,dur:0.2,lane:0},{time:5.2,dur:0.2,lane:2},{time:5.6,dur:0.2,lane:2},
+        {time:6.0,dur:0.4,lane:1},{time:6.5,dur:0.2,lane:2},{time:6.7,dur:0.6,lane:2},
+        {time:7.8,dur:0.1,lane:0},{time:8.0,dur:0.1,lane:0},{time:8.2,dur:0.2,lane:1},
+        {time:8.4,dur:0.6,lane:2},{time:9.3,dur:0.2,lane:2},{time:9.5,dur:0.4,lane:1},
+        {time:10.0,dur:0.8,lane:2},{time:11.3,dur:0.2,lane:0},{time:11.5,dur:0.2,lane:1},
+        {time:11.7,dur:0.2,lane:2},{time:12.0,dur:0.4,lane:2},{time:13.4,dur:0.2,lane:1},
+        {time:13.9,dur:0.7,lane:2},{time:14.7,dur:0.5,lane:1},{time:15.4,dur:0.8,lane:2},
+        {time:16.5,dur:0.2,lane:0},{time:16.7,dur:0.2,lane:1},{time:16.9,dur:0.2,lane:0},
+        {time:17.1,dur:0.1,lane:1},{time:17.3,dur:0.9,lane:2},{time:18.2,dur:0.6,lane:1},
+        {time:18.9,dur:0.7,lane:2},{time:19.7,dur:0.2,lane:0},{time:20.0,dur:0.2,lane:1},
+        {time:20.2,dur:0.1,lane:0},{time:20.4,dur:0.4,lane:2},{time:20.8,dur:0.9,lane:2},
+        {time:21.7,dur:0.6,lane:1},{time:22.3,dur:0.4,lane:2},{time:23.0,dur:0.2,lane:0},
+        {time:23.2,dur:0.2,lane:1},{time:23.4,dur:0.2,lane:2},{time:23.6,dur:0.2,lane:1},
+        {time:23.9,dur:0.2,lane:2},{time:24.1,dur:0.2,lane:0},{time:24.3,dur:0.4,lane:2},
+        {time:24.7,dur:0.2,lane:1},{time:25.2,dur:0.4,lane:2},{time:25.6,dur:0.2,lane:0},
+        {time:25.8,dur:0.5,lane:2},{time:26.5,dur:0.2,lane:1},{time:26.9,dur:0.2,lane:0},
+        {time:27.1,dur:0.2,lane:2},{time:27.3,dur:0.2,lane:1},{time:27.6,dur:0.2,lane:2}
+    ];
+
+    function timeToY(gameTime, noteTime) {
+        return ((gameTime - noteTime) / LEAD_SEC + 1) * HIT_LINE_Y;
+    }
+
+    // =============================================
+    //  COUNTDOWN + PRE-SCROLL
+    // =============================================
+    startBtn.addEventListener('click', () => {
+        document.getElementById('start-screen').style.display = 'none';
+
+        // Ensure audio is unlocked (backup — in case firstTouch didn't fire)
+        unlockAllAudio();
+
+        // Stop ambient waiting sound
+        stopAmbientSound();
+
+        createNotes();
+        preScrolling = true;
+        preScrollStartTime = performance.now();
+        requestAnimationFrame(preScrollLoop);
+        startCountdown();
+    });
+
+    function getPreScrollTime() {
+        return (performance.now() - preScrollStartTime) / 1000 - PRE_SCROLL_SEC;
+    }
+
+    function preScrollLoop() {
+        if (!preScrolling) return;
+        const t = getPreScrollTime();
+        for (const n of notes) {
+            if (n.state === 'done' || n.state === 'miss') continue;
+            const y = timeToY(t, n.time);
+            n.y = y;
+            if (y < -80) { n.el.style.display = 'none'; continue; }
+            n.el.style.display = '';
+            n.el.style.top = y + 'px';
         }
+        requestAnimationFrame(preScrollLoop);
+    }
 
-        // =============================================
-        //  AMBIENT WAITING SOUND (looping atmospheric pad)
-        // =============================================
-        let ambientNodes = null;
-
-        function startAmbientSound() {
-            if (ambientNodes) return;
-            try {
-                const ctx = getAudioCtx();
-                const master = ctx.createGain();
-                master.gain.setValueAtTime(0, ctx.currentTime);
-                master.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 1.5);
-                master.connect(ctx.destination);
-
-                // Deep pad — low warm drone
-                const pad1 = ctx.createOscillator();
-                pad1.type = 'sine';
-                pad1.frequency.value = 110;
-                const pad1g = ctx.createGain();
-                pad1g.gain.value = 0.35;
-                pad1.connect(pad1g);
-                pad1g.connect(master);
-                pad1.start();
-
-                // Mid pad — soft shimmer
-                const pad2 = ctx.createOscillator();
-                pad2.type = 'triangle';
-                pad2.frequency.value = 220;
-                const pad2g = ctx.createGain();
-                pad2g.gain.value = 0.15;
-                pad2.connect(pad2g);
-                pad2g.connect(master);
-                pad2.start();
-
-                // High shimmer — gentle movement
-                const pad3 = ctx.createOscillator();
-                pad3.type = 'sine';
-                pad3.frequency.value = 330;
-                const pad3g = ctx.createGain();
-                pad3g.gain.value = 0.08;
-                pad3.connect(pad3g);
-                pad3g.connect(master);
-                pad3.start();
-
-                // Slow LFO on the mid pad for gentle pulsing
-                const lfo = ctx.createOscillator();
-                lfo.type = 'sine';
-                lfo.frequency.value = 0.3;
-                const lfoGain = ctx.createGain();
-                lfoGain.gain.value = 0.06;
-                lfo.connect(lfoGain);
-                lfoGain.connect(pad2g.gain);
-                lfo.start();
-
-                // Subtle detune drift on high pad
-                const lfo2 = ctx.createOscillator();
-                lfo2.type = 'sine';
-                lfo2.frequency.value = 0.15;
-                const lfo2Gain = ctx.createGain();
-                lfo2Gain.gain.value = 3;
-                lfo2.connect(lfo2Gain);
-                lfo2Gain.connect(pad3.detune);
-                lfo2.start();
-
-                ambientNodes = { master, oscs: [pad1, pad2, pad3, lfo, lfo2], ctx };
-            } catch (e) {}
-        }
-
-        function stopAmbientSound() {
-            if (!ambientNodes) return;
-            try {
-                const { master, oscs, ctx } = ambientNodes;
-                // Fade out smoothly
-                master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.8);
+    function startCountdown() {
+        countdownEl.style.display = 'flex';
+        let count = COUNTDOWN_SEC;
+        function tick() {
+            if (count > 0) {
+                countdownNumEl.textContent = count;
+                countdownNumEl.style.animation = 'none';
+                void countdownNumEl.offsetWidth;
+                countdownNumEl.style.animation = 'countPulse 0.8s ease-out';
+                playCountdownBeep(false);
+                count--;
+                setTimeout(tick, 1000);
+            } else {
+                countdownNumEl.textContent = 'GO!';
+                playCountdownBeep(true);
+                countdownNumEl.style.animation = 'none';
+                void countdownNumEl.offsetWidth;
+                countdownNumEl.style.animation = 'countPulse 0.8s ease-out';
                 setTimeout(() => {
-                    oscs.forEach(o => { try { o.stop(); } catch(e) {} });
-                }, 900);
-            } catch (e) {}
-            ambientNodes = null;
-        }
-
-        function playCountdownBeep(isGo) {
-            try {
-                const ctx = getAudioCtx();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
-                if (isGo) {
-                    // "GO!" — rising two-tone, brighter and longer
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(880, ctx.currentTime);
-                    osc.frequency.setValueAtTime(1320, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.25, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.4);
-                } else {
-                    // Count beep (3, 2, 1) — clean short tick
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(660, ctx.currentTime);
-                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.15);
-                }
-            } catch (e) {}
-        }
-
-        // =============================================
-        //  LEADERBOARD
-        // =============================================
-        const LB_KEY = 'taptap_leaderboard';
-        function getLeaderboard() {
-            try { return JSON.parse(localStorage.getItem(LB_KEY)) || []; } catch { return []; }
-        }
-        function saveLeaderboard(lb) {
-            try { localStorage.setItem(LB_KEY, JSON.stringify(lb)); } catch {}
-        }
-        function addToLeaderboard(name, sc) {
-            const lb = getLeaderboard();
-            lb.push({ name, score: sc, date: Date.now() });
-            lb.sort((a, b) => b.score - a.score);
-            if (lb.length > 10) lb.length = 10;
-            saveLeaderboard(lb);
-            return lb;
-        }
-
-        // =============================================
-        //  LEVEL DATA
-        // =============================================
-        const levelData = [
-            {time:1.0,dur:0.1,lane:2},
-            {time:1.3,dur:0.1,lane:2},{time:1.5,dur:0.8,lane:2},{time:1.7,dur:0.3,lane:0},
-            {time:2.1,dur:0.2,lane:0},{time:2.3,dur:0.2,lane:2},{time:2.6,dur:0.3,lane:2},
-            {time:3.0,dur:1.4,lane:2},{time:3.4,dur:0.3,lane:0},{time:3.9,dur:0.2,lane:1},
-            {time:4.5,dur:0.2,lane:0},{time:5.2,dur:0.2,lane:2},{time:5.6,dur:0.2,lane:2},
-            {time:6.0,dur:0.4,lane:1},{time:6.5,dur:0.2,lane:2},{time:6.7,dur:0.6,lane:2},
-            {time:7.8,dur:0.1,lane:0},{time:8.0,dur:0.1,lane:0},{time:8.2,dur:0.2,lane:1},
-            {time:8.4,dur:0.6,lane:2},{time:9.3,dur:0.2,lane:2},{time:9.5,dur:0.4,lane:1},
-            {time:10.0,dur:0.8,lane:2},{time:11.3,dur:0.2,lane:0},{time:11.5,dur:0.2,lane:1},
-            {time:11.7,dur:0.2,lane:2},{time:12.0,dur:0.4,lane:2},{time:13.4,dur:0.2,lane:1},
-            {time:13.9,dur:0.7,lane:2},{time:14.7,dur:0.5,lane:1},{time:15.4,dur:0.8,lane:2},
-            {time:16.5,dur:0.2,lane:0},{time:16.7,dur:0.2,lane:1},{time:16.9,dur:0.2,lane:0},
-            {time:17.1,dur:0.1,lane:1},{time:17.3,dur:0.9,lane:2},{time:18.2,dur:0.6,lane:1},
-            {time:18.9,dur:0.7,lane:2},{time:19.7,dur:0.2,lane:0},{time:20.0,dur:0.2,lane:1},
-            {time:20.2,dur:0.1,lane:0},{time:20.4,dur:0.4,lane:2},{time:20.8,dur:0.9,lane:2},
-            {time:21.7,dur:0.6,lane:1},{time:22.3,dur:0.4,lane:2},{time:23.0,dur:0.2,lane:0},
-            {time:23.2,dur:0.2,lane:1},{time:23.4,dur:0.2,lane:2},{time:23.6,dur:0.2,lane:1},
-            {time:23.9,dur:0.2,lane:2},{time:24.1,dur:0.2,lane:0},{time:24.3,dur:0.4,lane:2},
-            {time:24.7,dur:0.2,lane:1},{time:25.2,dur:0.4,lane:2},{time:25.6,dur:0.2,lane:0},
-            {time:25.8,dur:0.5,lane:2},{time:26.5,dur:0.2,lane:1},{time:26.9,dur:0.2,lane:0},
-            {time:27.1,dur:0.2,lane:2},{time:27.3,dur:0.2,lane:1},{time:27.6,dur:0.2,lane:2}
-        ];
-
-        function timeToY(gameTime, noteTime) {
-            return ((gameTime - noteTime) / LEAD_SEC + 1) * HIT_LINE_Y;
-        }
-
-        // =============================================
-        //  COUNTDOWN + PRE-SCROLL
-        // =============================================
-        startBtn.addEventListener('click', () => {
-            document.getElementById('start-screen').style.display = 'none';
-
-            // Unlock AudioContext on user gesture (mobile)
-            getAudioCtx();
-
-            // Stop the waiting ambient sound
-            stopAmbientSound();
-
-            // FIX: Unlock audio on mobile — play+pause during user gesture
-            audio.volume = 0;
-            audio.play().then(() => {
-                audio.pause();
-                audio.currentTime = 0;
-                audio.volume = 1;
-            }).catch(() => {});
-
-            createNotes();
-            preScrolling = true;
-            preScrollStartTime = performance.now();
-            requestAnimationFrame(preScrollLoop);
-            startCountdown();
-        });
-
-        function getPreScrollTime() {
-            return (performance.now() - preScrollStartTime) / 1000 - PRE_SCROLL_SEC;
-        }
-
-        function preScrollLoop() {
-            if (!preScrolling) return;
-            const t = getPreScrollTime();
-            for (const n of notes) {
-                if (n.state === 'done' || n.state === 'miss') continue;
-                const y = timeToY(t, n.time);
-                n.y = y;
-                if (y < -80) { n.el.style.display = 'none'; continue; }
-                n.el.style.display = '';
-                n.el.style.top = y + 'px';
+                    countdownEl.style.display = 'none';
+                    preScrolling = false;
+                    startGame();
+                }, 600);
             }
-            requestAnimationFrame(preScrollLoop);
         }
+        tick();
+    }
 
-        function startCountdown() {
-            countdownEl.style.display = 'flex';
-            let count = COUNTDOWN_SEC;
-            function tick() {
-                if (count > 0) {
-                    countdownNumEl.textContent = count;
-                    countdownNumEl.style.animation = 'none';
-                    void countdownNumEl.offsetWidth;
-                    countdownNumEl.style.animation = 'countPulse 0.8s ease-out';
-                    playCountdownBeep(false);
-                    count--;
-                    setTimeout(tick, 1000);
-                } else {
-                    countdownNumEl.textContent = 'GO!';
-                    playCountdownBeep(true);
-                    countdownNumEl.style.animation = 'none';
-                    void countdownNumEl.offsetWidth;
-                    countdownNumEl.style.animation = 'countPulse 0.8s ease-out';
-                    setTimeout(() => {
-                        countdownEl.style.display = 'none';
-                        preScrolling = false;
-                        startGame();
-                    }, 600);
-                }
-            }
-            tick();
-        }
-
-        function startGame() {
-            audio.currentTime = 0;
-            audio.play().then(() => {
-                gameActive = true;
-                gameStartTime = performance.now();
-                requestAnimationFrame(gameLoop);
-            }).catch(() => {
-                gameActive = true;
-                gameStartTime = preScrollStartTime + PRE_SCROLL_SEC * 1000;
-                requestAnimationFrame(gameLoop);
-            });
-        }
-
-        function getTime() { return (performance.now() - gameStartTime) / 1000; }
-
-        function createNotes() {
-            levelData.forEach(d => {
-                const el = document.createElement('div');
-                el.className = 'note';
-                const isLong = d.dur > LONG_THRESHOLD;
-                if (isLong) {
-                    const tail = document.createElement('div');
-                    tail.className = 'note-tail';
-                    tail.style.height = ((d.dur / LEAD_SEC) * HIT_LINE_Y) + 'px';
-                    el.appendChild(tail);
-                }
-                lanesEls[d.lane].appendChild(el);
-                notes.push({ el, lane: d.lane, time: d.time, dur: d.dur, isLong, state: 'wait', holdTicks: 0, holdStart: 0, y: -100 });
-            });
-        }
-
-        // =============================================
-        //  GAME LOOP
-        // =============================================
-        function gameLoop() {
-            if (!gameActive) return;
-            const t = getTime();
-
-            for (const n of notes) {
-                if (n.state === 'done' || n.state === 'miss') continue;
-
-                if (n.state === 'held') {
-                    const isHeld = heldKeys.has(n.lane) || isTouchHeld(n.lane);
-                    const endTime = n.time + n.dur;
-                    const elapsed = t - n.holdStart;
-                    const ticks = Math.floor(elapsed / 0.12);
-
-                    n.el.style.top = HIT_LINE_Y + 'px';
-                    n.y = HIT_LINE_Y;
-
-                    const tailEl = n.el.querySelector('.note-tail');
-                    if (tailEl) {
-                        const remaining = Math.max(0, endTime - t);
-                        tailEl.style.height = Math.max(0, (remaining / LEAD_SEC) * HIT_LINE_Y) + 'px';
-                    }
-
-                    if (ticks > n.holdTicks) {
-                        score += (ticks - n.holdTicks) * 20;
-                        n.holdTicks = ticks;
-                        scoreEl.innerText = score;
-                    }
-                    if (!isHeld || t >= endTime) {
-                        n.state = 'done';
-                        showBurst(n.lane, HIT_LINE_Y);
-                        n.el.remove();
-                        if (t >= endTime - 0.15) {
-                            score += 100;
-                            scoreEl.innerText = score;
-                            showFeedback(n.lane, 'HELD!', '#00ffcc');
-                        }
-                    }
-                    continue;
-                }
-
-                const y = timeToY(t, n.time);
-                n.y = y;
-
-                if (y < -80) { n.el.style.display = 'none'; continue; }
-                n.el.style.display = '';
-                n.el.style.top = y + 'px';
-
-                if (y > HIT_LINE_Y + HIT_WINDOW + 20) {
-                    n.state = 'miss';
-                    combo = 0;
-                    updateCombo();
-                    showMiss(n.lane, y);
-                    n.el.remove();
-                }
-            }
-
-            const lastT = levelData[levelData.length - 1].time + 4;
-            if (t > lastT) { gameActive = false; showEnd(); return; }
+    function startGame() {
+        // Audio was unlocked during PLAY click, so play() works here
+        audio.currentTime = 0;
+        audio.volume = 1;
+        audio.play().then(() => {
+            gameActive = true;
+            gameStartTime = performance.now();
             requestAnimationFrame(gameLoop);
-        }
-
-        function isTouchHeld(lane) {
-            for (const [, l] of activeTouches) { if (l === lane) return true; }
-            return false;
-        }
-
-        // =============================================
-        //  LANE PRESS / RELEASE
-        // =============================================
-        function lanePress(lane) {
-            if (!gameActive) return;
-            keyVisuals[lane].classList.add('key-active');
-            lanesEls[lane].classList.add('lane-flash');
-            tryHit(lane);
-        }
-
-        function laneRelease(lane) {
-            if (!heldKeys.has(lane) && !isTouchHeld(lane)) {
-                keyVisuals[lane].classList.remove('key-active');
-                lanesEls[lane].classList.remove('lane-flash');
-            }
-        }
-
-        // =============================================
-        //  KEYBOARD INPUT
-        // =============================================
-        window.addEventListener('keydown', e => {
-            if (['ArrowLeft','ArrowDown','ArrowRight','ArrowUp'].includes(e.key)) e.preventDefault();
-            if (!gameActive) return;
-            const lane = KEY_TO_LANE[e.key.toLowerCase()];
-            if (lane === undefined) return;
-            if (!heldKeys.has(lane)) {
-                heldKeys.add(lane);
-                lanePress(lane);
-            }
+        }).catch(() => {
+            gameActive = true;
+            gameStartTime = preScrollStartTime + PRE_SCROLL_SEC * 1000;
+            requestAnimationFrame(gameLoop);
         });
+    }
 
-        window.addEventListener('keyup', e => {
-            const lane = KEY_TO_LANE[e.key.toLowerCase()];
-            if (lane === undefined) return;
-            heldKeys.delete(lane);
-            laneRelease(lane);
-        });
+    function getTime() { return (performance.now() - gameStartTime) / 1000; }
 
-        // =============================================
-        //  TOUCH INPUT
-        // =============================================
-        function getTouchLane(touch) {
-            const el = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (!el) return -1;
-            const zone = el.closest('.touch-zone') || el.closest('.lane');
-            if (!zone) return -1;
-            const laneEl = zone.classList.contains('lane') ? zone : zone.parentElement;
-            return lanesEls.indexOf(laneEl);
-        }
-
-        gameBoard.addEventListener('touchstart', e => {
-            if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
-            e.preventDefault();
-            for (const touch of e.changedTouches) {
-                const lane = getTouchLane(touch);
-                if (lane === -1) continue;
-                const wasHeld = isTouchHeld(lane);
-                activeTouches.set(touch.identifier, lane);
-                if (!wasHeld) lanePress(lane);
+    function createNotes() {
+        levelData.forEach(d => {
+            const el = document.createElement('div');
+            el.className = 'note';
+            const isLong = d.dur > LONG_THRESHOLD;
+            if (isLong) {
+                const tail = document.createElement('div');
+                tail.className = 'note-tail';
+                tail.style.height = ((d.dur / LEAD_SEC) * HIT_LINE_Y) + 'px';
+                el.appendChild(tail);
             }
-        }, { passive: false });
+            lanesEls[d.lane].appendChild(el);
+            notes.push({ el, lane: d.lane, time: d.time, dur: d.dur, isLong, state: 'wait', holdTicks: 0, holdStart: 0, y: -100 });
+        });
+    }
 
-        gameBoard.addEventListener('touchmove', e => {
-            if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
-            e.preventDefault();
-            for (const touch of e.changedTouches) {
-                const newLane = getTouchLane(touch);
-                const oldLane = activeTouches.get(touch.identifier);
-                if (oldLane !== undefined && newLane !== oldLane) {
-                    activeTouches.set(touch.identifier, newLane);
-                    if (oldLane !== -1 && !isTouchHeld(oldLane)) laneRelease(oldLane);
-                    if (newLane !== -1) {
-                        keyVisuals[newLane].classList.add('key-active');
-                        lanesEls[newLane].classList.add('lane-flash');
+    // =============================================
+    //  GAME LOOP
+    // =============================================
+    function gameLoop() {
+        if (!gameActive) return;
+        const t = getTime();
+        for (const n of notes) {
+            if (n.state === 'done' || n.state === 'miss') continue;
+            if (n.state === 'held') {
+                const isHeld = heldKeys.has(n.lane) || isTouchHeld(n.lane);
+                const endTime = n.time + n.dur;
+                const elapsed = t - n.holdStart;
+                const ticks = Math.floor(elapsed / 0.12);
+                n.el.style.top = HIT_LINE_Y + 'px';
+                n.y = HIT_LINE_Y;
+                const tailEl = n.el.querySelector('.note-tail');
+                if (tailEl) {
+                    const remaining = Math.max(0, endTime - t);
+                    tailEl.style.height = Math.max(0, (remaining / LEAD_SEC) * HIT_LINE_Y) + 'px';
+                }
+                if (ticks > n.holdTicks) {
+                    score += (ticks - n.holdTicks) * 20;
+                    n.holdTicks = ticks;
+                    scoreEl.innerText = score;
+                }
+                if (!isHeld || t >= endTime) {
+                    n.state = 'done';
+                    showBurst(n.lane, HIT_LINE_Y);
+                    n.el.remove();
+                    if (t >= endTime - 0.15) {
+                        score += 100;
+                        scoreEl.innerText = score;
+                        showFeedback(n.lane, 'HELD!', '#00ffcc');
                     }
                 }
+                continue;
             }
-        }, { passive: false });
-
-        gameBoard.addEventListener('touchend', e => {
-            if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
-            e.preventDefault();
-            for (const touch of e.changedTouches) {
-                const lane = activeTouches.get(touch.identifier);
-                activeTouches.delete(touch.identifier);
-                if (lane !== undefined && lane !== -1) laneRelease(lane);
+            const y = timeToY(t, n.time);
+            n.y = y;
+            if (y < -80) { n.el.style.display = 'none'; continue; }
+            n.el.style.display = '';
+            n.el.style.top = y + 'px';
+            if (y > HIT_LINE_Y + HIT_WINDOW + 20) {
+                n.state = 'miss';
+                combo = 0;
+                updateCombo();
+                showMiss(n.lane, y);
+                n.el.remove();
             }
-        }, { passive: false });
+        }
+        const lastT = levelData[levelData.length - 1].time + 4;
+        if (t > lastT) { gameActive = false; showEnd(); return; }
+        requestAnimationFrame(gameLoop);
+    }
 
-        gameBoard.addEventListener('touchcancel', e => {
-            for (const touch of e.changedTouches) {
-                const lane = activeTouches.get(touch.identifier);
-                activeTouches.delete(touch.identifier);
-                if (lane !== undefined && lane !== -1) laneRelease(lane);
-            }
-        });
+    function isTouchHeld(lane) {
+        for (const [, l] of activeTouches) { if (l === lane) return true; }
+        return false;
+    }
 
-        // =============================================
-        //  HIT LOGIC
-        // =============================================
-        function tryHit(lane) {
-            let best = null, bestDist = Infinity;
-            for (const n of notes) {
-                if (n.lane !== lane || (n.state !== 'wait' && n.state !== 'active')) continue;
-                const dist = Math.abs(n.y - HIT_LINE_Y);
-                if (dist < HIT_WINDOW && dist < bestDist) { bestDist = dist; best = n; }
-            }
-            if (!best) return;
+    // =============================================
+    //  LANE PRESS / RELEASE
+    // =============================================
+    function lanePress(lane) {
+        if (!gameActive) return;
+        keyVisuals[lane].classList.add('key-active');
+        lanesEls[lane].classList.add('lane-flash');
+        tryHit(lane);
+    }
+    function laneRelease(lane) {
+        if (!heldKeys.has(lane) && !isTouchHeld(lane)) {
+            keyVisuals[lane].classList.remove('key-active');
+            lanesEls[lane].classList.remove('lane-flash');
+        }
+    }
 
-            let pts, txt, clr;
-            if (bestDist < 25)      { pts = 300; txt = 'PERFECT!'; clr = '#ffdd00'; }
-            else if (bestDist < 55) { pts = 200; txt = 'GREAT!';   clr = '#39ff14'; }
-            else                    { pts = 100; txt = 'GOOD';     clr = '#aaaaaa'; }
+    // =============================================
+    //  KEYBOARD INPUT
+    // =============================================
+    window.addEventListener('keydown', e => {
+        if (['ArrowLeft','ArrowDown','ArrowRight','ArrowUp'].includes(e.key)) e.preventDefault();
+        if (!gameActive) return;
+        const lane = KEY_TO_LANE[e.key.toLowerCase()];
+        if (lane === undefined) return;
+        if (!heldKeys.has(lane)) { heldKeys.add(lane); lanePress(lane); }
+    });
+    window.addEventListener('keyup', e => {
+        const lane = KEY_TO_LANE[e.key.toLowerCase()];
+        if (lane === undefined) return;
+        heldKeys.delete(lane);
+        laneRelease(lane);
+    });
 
-            combo++;
-            if (combo > bestStreak) bestStreak = combo;
-            let mult = 1 + Math.floor(combo / 10) * 0.5;
-            pts = Math.round(pts * mult);
-            score += pts;
+    // =============================================
+    //  TOUCH INPUT
+    // =============================================
+    function getTouchLane(touch) {
+        const el = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (!el) return -1;
+        const zone = el.closest('.touch-zone') || el.closest('.lane');
+        if (!zone) return -1;
+        const laneEl = zone.classList.contains('lane') ? zone : zone.parentElement;
+        return lanesEls.indexOf(laneEl);
+    }
 
-            for (const m of STREAK_MILESTONES) {
-                if (combo === m.at && !streakMilestonesHit.has(m.at)) {
-                    streakMilestonesHit.add(m.at);
-                    score += m.bonus;
-                    showStreakBonus(m.label);
+    gameBoard.addEventListener('touchstart', e => {
+        if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
+        e.preventDefault();
+        for (const touch of e.changedTouches) {
+            const lane = getTouchLane(touch);
+            if (lane === -1) continue;
+            const wasHeld = isTouchHeld(lane);
+            activeTouches.set(touch.identifier, lane);
+            if (!wasHeld) lanePress(lane);
+        }
+    }, { passive: false });
+
+    gameBoard.addEventListener('touchmove', e => {
+        if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
+        e.preventDefault();
+        for (const touch of e.changedTouches) {
+            const newLane = getTouchLane(touch);
+            const oldLane = activeTouches.get(touch.identifier);
+            if (oldLane !== undefined && newLane !== oldLane) {
+                activeTouches.set(touch.identifier, newLane);
+                if (oldLane !== -1 && !isTouchHeld(oldLane)) laneRelease(oldLane);
+                if (newLane !== -1) {
+                    keyVisuals[newLane].classList.add('key-active');
+                    lanesEls[newLane].classList.add('lane-flash');
                 }
             }
+        }
+    }, { passive: false });
 
-            scoreEl.innerText = score;
-            updateCombo();
-            showFeedback(lane, txt, clr);
+    gameBoard.addEventListener('touchend', e => {
+        if (e.target.closest('.overlay-screen') || e.target.closest('#start-screen')) return;
+        e.preventDefault();
+        for (const touch of e.changedTouches) {
+            const lane = activeTouches.get(touch.identifier);
+            activeTouches.delete(touch.identifier);
+            if (lane !== undefined && lane !== -1) laneRelease(lane);
+        }
+    }, { passive: false });
 
-            if (best.isLong) {
-                best.state = 'held';
-                best.holdStart = getTime();
-                best.el.classList.add('holding');
-                best.el.style.top = HIT_LINE_Y + 'px';
-            } else {
-                best.state = 'done';
-                showBurst(lane, best.y);
-                best.el.remove();
+    gameBoard.addEventListener('touchcancel', e => {
+        for (const touch of e.changedTouches) {
+            const lane = activeTouches.get(touch.identifier);
+            activeTouches.delete(touch.identifier);
+            if (lane !== undefined && lane !== -1) laneRelease(lane);
+        }
+    });
+
+    // =============================================
+    //  HIT LOGIC
+    // =============================================
+    function tryHit(lane) {
+        let best = null, bestDist = Infinity;
+        for (const n of notes) {
+            if (n.lane !== lane || (n.state !== 'wait' && n.state !== 'active')) continue;
+            const dist = Math.abs(n.y - HIT_LINE_Y);
+            if (dist < HIT_WINDOW && dist < bestDist) { bestDist = dist; best = n; }
+        }
+        if (!best) return;
+        let pts, txt, clr;
+        if (bestDist < 25)      { pts = 300; txt = 'PERFECT!'; clr = '#ffdd00'; }
+        else if (bestDist < 55) { pts = 200; txt = 'GREAT!';   clr = '#39ff14'; }
+        else                    { pts = 100; txt = 'GOOD';     clr = '#aaaaaa'; }
+        combo++;
+        if (combo > bestStreak) bestStreak = combo;
+        let mult = 1 + Math.floor(combo / 10) * 0.5;
+        pts = Math.round(pts * mult);
+        score += pts;
+        for (const m of STREAK_MILESTONES) {
+            if (combo === m.at && !streakMilestonesHit.has(m.at)) {
+                streakMilestonesHit.add(m.at);
+                score += m.bonus;
+                showStreakBonus(m.label);
             }
         }
-
-        // =============================================
-        //  BURST EFFECT
-        // =============================================
-        function showBurst(lane, yPos) {
-            const burst = document.createElement('div');
-            burst.className = 'note-burst';
-            burst.style.top = yPos + 'px';
-            burst.style.background = `radial-gradient(circle, ${LANE_HEX[lane]}66, transparent)`;
-            burst.style.boxShadow = `0 0 30px ${LANE_HEX[lane]}`;
-            lanesEls[lane].appendChild(burst);
-            setTimeout(() => burst.remove(), 350);
+        scoreEl.innerText = score;
+        updateCombo();
+        showFeedback(lane, txt, clr);
+        if (best.isLong) {
+            best.state = 'held';
+            best.holdStart = getTime();
+            best.el.classList.add('holding');
+            best.el.style.top = HIT_LINE_Y + 'px';
+        } else {
+            best.state = 'done';
+            showBurst(lane, best.y);
+            best.el.remove();
         }
+    }
 
-        // =============================================
-        //  UI HELPERS
-        // =============================================
-        function showFeedback(lane, text, color) {
-            const el = document.createElement('div');
-            el.className = 'hit-feedback';
-            el.style.bottom = '150px';
-            el.style.color = color;
-            el.textContent = text;
-            lanesEls[lane].appendChild(el);
-            setTimeout(() => el.remove(), 600);
+    // =============================================
+    //  BURST EFFECT
+    // =============================================
+    function showBurst(lane, yPos) {
+        const burst = document.createElement('div');
+        burst.className = 'note-burst';
+        burst.style.top = yPos + 'px';
+        burst.style.background = `radial-gradient(circle, ${LANE_HEX[lane]}66, transparent)`;
+        burst.style.boxShadow = `0 0 30px ${LANE_HEX[lane]}`;
+        lanesEls[lane].appendChild(burst);
+        setTimeout(() => burst.remove(), 350);
+    }
+
+    // =============================================
+    //  UI HELPERS
+    // =============================================
+    function showFeedback(lane, text, color) {
+        const el = document.createElement('div');
+        el.className = 'hit-feedback';
+        el.style.bottom = '150px';
+        el.style.color = color;
+        el.textContent = text;
+        lanesEls[lane].appendChild(el);
+        setTimeout(() => el.remove(), 600);
+    }
+    function showMiss(lane, yPos) {
+        const el = document.createElement('div');
+        el.className = 'miss-feedback';
+        el.style.top = Math.min(yPos, HIT_LINE_Y + 30) + 'px';
+        el.textContent = 'MISS';
+        lanesEls[lane].appendChild(el);
+        setTimeout(() => el.remove(), 800);
+    }
+    function showStreakBonus(label) {
+        const el = document.createElement('div');
+        el.className = 'streak-bonus-feedback';
+        el.style.color = '#ff8800';
+        el.textContent = label;
+        gameBoard.appendChild(el);
+        setTimeout(() => el.remove(), 1000);
+    }
+    function updateCombo() {
+        if (combo >= 5) {
+            comboEl.textContent = combo + ' COMBO';
+            comboEl.style.color = combo >= 30 ? '#ff3366' : combo >= 20 ? '#ff8800' : combo >= 10 ? '#ffdd00' : '#ffaa00';
+            comboEl.style.textShadow = `0 0 12px ${comboEl.style.color}`;
+        } else { comboEl.textContent = ''; }
+        if (bestStreak >= 5) streakEl.textContent = 'Best streak: ' + bestStreak;
+    }
+
+    // =============================================
+    //  END SCREEN + LEADERBOARD
+    // =============================================
+    function playAgain() {
+        lbAudio.pause();
+        lbAudio.currentTime = 0;
+        location.reload();
+    }
+
+    function showEnd() {
+        // leaderboard.wav was already unlocked during PLAY click —
+        // play() will work even though we're not in a gesture handler
+        lbAudio.currentTime = 0;
+        lbAudio.volume = 0.5;
+        lbAudio.play().catch(() => {});
+
+        const div = document.createElement('div');
+        div.className = 'overlay-screen';
+        const lb = getLeaderboard();
+        const isTopScore = lb.length < 10 || score > (lb[lb.length - 1]?.score || 0);
+        let html = `<h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px">GAME OVER</h1>`;
+        html += `<p style="font-size:38px;margin:8px 0;font-weight:bold">${score.toLocaleString()}</p>`;
+        if (bestStreak >= 5) html += `<p style="font-size:16px;color:#ff8800;margin:4px 0">Best Streak: ${bestStreak}</p>`;
+        if (isTopScore && score > 0) {
+            html += `
+                <p style="font-size:14px;color:var(--color-a);margin:10px 0 5px">New high score! Enter your name:</p>
+                <input class="name-input" id="name-input" type="text" placeholder="Your name" maxlength="12"
+                       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                <button id="save-btn" style="padding:12px 40px;font-size:22px;margin-top:8px">SAVE</button>`;
+        } else {
+            html += buildLeaderboardHTML(lb, -1);
+            html += `<button onclick="playAgain()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
         }
+        div.innerHTML = html;
+        gameBoard.appendChild(div);
 
-        function showMiss(lane, yPos) {
-            const el = document.createElement('div');
-            el.className = 'miss-feedback';
-            el.style.top = Math.min(yPos, HIT_LINE_Y + 30) + 'px';
-            el.textContent = 'MISS';
-            lanesEls[lane].appendChild(el);
-            setTimeout(() => el.remove(), 800);
+        if (isTopScore && score > 0) {
+            const saveBtn = document.getElementById('save-btn');
+            const nameInput = document.getElementById('name-input');
+            setTimeout(() => { nameInput.focus(); nameInput.click(); }, 300);
+            const doSave = () => {
+                const name = nameInput.value.trim() || 'Player';
+                const newLb = addToLeaderboard(name, score);
+                const myIdx = newLb.findIndex(e => e.score === score && e.name === name);
+                div.innerHTML = `
+                    <h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px">GAME OVER</h1>
+                    <p style="font-size:38px;margin:8px 0;font-weight:bold">${score.toLocaleString()}</p>
+                    ${bestStreak >= 5 ? `<p style="font-size:16px;color:#ff8800;margin:4px 0">Best Streak: ${bestStreak}</p>` : ''}
+                    ${buildLeaderboardHTML(newLb, myIdx)}
+                    <button onclick="playAgain()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
+            };
+            saveBtn.addEventListener('click', doSave);
+            nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSave(); });
         }
+    }
 
-        function showStreakBonus(label) {
-            const el = document.createElement('div');
-            el.className = 'streak-bonus-feedback';
-            el.style.color = '#ff8800';
-            el.textContent = label;
-            gameBoard.appendChild(el);
-            setTimeout(() => el.remove(), 1000);
-        }
+    function buildLeaderboardHTML(lb, highlightIdx) {
+        if (lb.length === 0) return '';
+        const medals = ['🥇', '🥈', '🥉'];
+        let html = `<div class="lb-title">LEADERBOARD</div><ul class="lb-list">`;
+        lb.forEach((entry, i) => {
+            html += `<li class="${i === highlightIdx ? 'current' : ''}">
+                <span class="lb-rank">${medals[i] || (i + 1)}</span>
+                <span class="lb-name">${escHtml(entry.name)}</span>
+                <span class="lb-score">${entry.score.toLocaleString()}</span></li>`;
+        });
+        return html + `</ul>`;
+    }
 
-        function updateCombo() {
-            if (combo >= 5) {
-                comboEl.textContent = combo + ' COMBO';
-                comboEl.style.color = combo >= 30 ? '#ff3366' : combo >= 20 ? '#ff8800' : combo >= 10 ? '#ffdd00' : '#ffaa00';
-                comboEl.style.textShadow = `0 0 12px ${comboEl.style.color}`;
-            } else { comboEl.textContent = ''; }
-            if (bestStreak >= 5) streakEl.textContent = 'Best streak: ' + bestStreak;
-        }
+    function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+```
 
-        // =============================================
-        //  END SCREEN + LEADERBOARD
-        // =============================================
-        function playAgain() {
-            const lbAudio = document.getElementById('leaderboard-bgm');
-            lbAudio.pause();
-            lbAudio.currentTime = 0;
-            location.reload();
-        }
-
-        function showEnd() {
-            // Play leaderboard background music
-            const lbAudio = document.getElementById('leaderboard-bgm');
-            lbAudio.currentTime = 0;
-            lbAudio.volume = 0.5;
-            lbAudio.play().catch(() => {});
-
-            const div = document.createElement('div');
-            div.className = 'overlay-screen';
-
-            const lb = getLeaderboard();
-            const isTopScore = lb.length < 10 || score > (lb[lb.length - 1]?.score || 0);
-
-            let html = `<h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px">GAME OVER</h1>`;
-            html += `<p style="font-size:38px;margin:8px 0;font-weight:bold">${score.toLocaleString()}</p>`;
-            if (bestStreak >= 5) html += `<p style="font-size:16px;color:#ff8800;margin:4px 0">Best Streak: ${bestStreak}</p>`;
-
-            if (isTopScore && score > 0) {
-                html += `
-                    <p style="font-size:14px;color:var(--color-a);margin:10px 0 5px">New high score! Enter your name:</p>
-                    <input class="name-input" id="name-input" type="text" placeholder="Your name" maxlength="12"
-                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                    <button id="save-btn" style="padding:12px 40px;font-size:22px;margin-top:8px">SAVE</button>`;
-            } else {
-                html += buildLeaderboardHTML(lb, -1);
-                html += `<button onclick="playAgain()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
-            }
-
-            div.innerHTML = html;
-            gameBoard.appendChild(div);
-
-            if (isTopScore && score > 0) {
-                const saveBtn = document.getElementById('save-btn');
-                const nameInput = document.getElementById('name-input');
-
-                setTimeout(() => {
-                    nameInput.focus();
-                    nameInput.click();
-                }, 300);
-
-                const doSave = () => {
-                    const name = nameInput.value.trim() || 'Player';
-                    const newLb = addToLeaderboard(name, score);
-                    const myIdx = newLb.findIndex(e => e.score === score && e.name === name);
-                    div.innerHTML = `
-                        <h1 style="color:var(--color-s);font-size:36px;margin:0 0 5px">GAME OVER</h1>
-                        <p style="font-size:38px;margin:8px 0;font-weight:bold">${score.toLocaleString()}</p>
-                        ${bestStreak >= 5 ? `<p style="font-size:16px;color:#ff8800;margin:4px 0">Best Streak: ${bestStreak}</p>` : ''}
-                        ${buildLeaderboardHTML(newLb, myIdx)}
-                        <button onclick="playAgain()" style="margin-top:12px;padding:14px 45px;font-size:24px">PLAY AGAIN</button>`;
-                };
-                saveBtn.addEventListener('click', doSave);
-                nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSave(); });
-            }
-        }
-
-        function buildLeaderboardHTML(lb, highlightIdx) {
-            if (lb.length === 0) return '';
-            const medals = ['🥇', '🥈', '🥉'];
-            let html = `<div class="lb-title">LEADERBOARD</div><ul class="lb-list">`;
-            lb.forEach((entry, i) => {
-                html += `<li class="${i === highlightIdx ? 'current' : ''}">
-                    <span class="lb-rank">${medals[i] || (i + 1)}</span>
-                    <span class="lb-name">${escHtml(entry.name)}</span>
-                    <span class="lb-score">${entry.score.toLocaleString()}</span></li>`;
-            });
-            return html + `</ul>`;
-        }
-
-        function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    </script>
 </body>
 </html>

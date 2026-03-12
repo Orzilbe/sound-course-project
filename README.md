@@ -2,7 +2,7 @@
 
 # Tap Tap — Rhythm Game
 
-**Sound Design Course Project — Or Zilberberg**
+**Sound Design Course Project - Or Zilberberg**
 
 A browser-based rhythm game where notes scroll down three lanes in sync with music. Hit them at the right moment using arrow keys or touch.
 
